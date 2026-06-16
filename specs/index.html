@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>规范列表 - 开发规范指南</title>
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<div class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">&#9776;</div>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>开发规范指南</h1>
+      <div class="version">v1.0 &middot; 2026-06-16</div>
+      <div class="tagline">统一标准 · 高效协作</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">站点</div>
+      <a href="../index.html"><span class="icon">🏠</span>首页</a>
+      <a href="index.html" class="active"><span class="icon">📋</span>规范列表</a>
+      <div class="nav-group">规范模块</div>
+      <a href="i18n/index.html"><span class="icon">🌐</span>多语言规范</a>
+    </nav>
+    <div class="sidebar-footer">
+      sinoma-dcc-web &middot; 前端团队
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="content">
+
+      <div class="page-header">
+        <h2>规范列表</h2>
+        <div class="meta">
+          <span><span class="dot"></span>共 1 个规范模块</span>
+          <span><span class="dot"></span>更新日期：2026-06-16</span>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <a href="i18n/index.html" class="card-item">
+          <div class="card-icon">🌐</div>
+          <div class="card-title">多语言（i18n）使用规范</div>
+          <div class="card-desc">统一多语言词条的命名规范、分类约定和使用流程，防止重复词条，提升国际化开发效率。</div>
+          <div class="card-meta">
+            <span>📅 2026-06-16</span>
+            <span>🏷️ 国际化</span>
+            <span>✅ 已发布</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">📋</span>规划中的规范</h2>
+        <p>以下规范模块正在规划中，将陆续发布：</p>
+        <div class="card-grid">
+          <div class="card-item" style="opacity: 0.7; pointer-events: none;">
+            <div class="card-icon">🎨</div>
+            <div class="card-title">代码风格规范</div>
+            <div class="card-desc">统一前端代码的格式化规则、命名约定和最佳实践。</div>
+            <div class="card-meta">
+              <span>📅 即将推出</span>
+              <span>🏷️ 代码质量</span>
+            </div>
+          </div>
+          <div class="card-item" style="opacity: 0.7; pointer-events: none;">
+            <div class="card-icon">🧩</div>
+            <div class="card-title">组件设计规范</div>
+            <div class="card-desc">定义组件的设计原则、API 规范和复用策略。</div>
+            <div class="card-meta">
+              <span>📅 即将推出</span>
+              <span>🏷️ 组件化</span>
+            </div>
+          </div>
+          <div class="card-item" style="opacity: 0.7; pointer-events: none;">
+            <div class="card-icon">🔌</div>
+            <div class="card-title">API 接口规范</div>
+            <div class="card-desc">统一前后端接口的设计标准、错误处理和数据格式。</div>
+            <div class="card-meta">
+              <span>📅 即将推出</span>
+              <span>🏷️ 接口设计</span>
+            </div>
+          </div>
+          <div class="card-item" style="opacity: 0.7; pointer-events: none;">
+            <div class="card-icon">⚡</div>
+            <div class="card-title">性能优化规范</div>
+            <div class="card-desc">前端性能优化的最佳实践、检测方法和优化策略。</div>
+            <div class="card-meta">
+              <span>📅 即将推出</span>
+              <span>🏷️ 性能</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">💡</span>如何添加新规范</h2>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-num"><div class="circle">1</div><div class="line"></div></div>
+            <div class="flow-content">
+              <div class="title">创建模块目录</div>
+              <p>在 <code>specs/</code> 目录下创建新文件夹，如 <code>specs/code-style/</code></p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num"><div class="circle">2</div><div class="line"></div></div>
+            <div class="flow-content">
+              <div class="title">编写 Markdown</div>
+              <p>在新目录下创建 <code>index.md</code> 文件，编写规范内容</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num"><div class="circle">3</div><div class="line"></div></div>
+            <div class="flow-content">
+              <div class="title">生成 HTML</div>
+              <p>通知 AI 根据 Markdown 内容生成对应的 <code>index.html</code></p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num"><div class="circle">4</div></div>
+            <div class="flow-content">
+              <div class="title">更新导航</div>
+              <p>在首页和列表页的侧边栏导航中添加新规范的链接</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="site-footer">
+        <p>© 2026 sinoma-dcc-web 前端团队 · 开发规范指南</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0})" aria-label="Back to top">&#8593;</button>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

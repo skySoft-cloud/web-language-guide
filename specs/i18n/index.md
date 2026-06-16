@@ -1,0 +1,501 @@
+# 多语言（i18n）使用规范
+
+> 适用项目：sinoma-dcc-web 及关联前端项目
+> 维护团队：前端团队
+> 更新日期：2026-06-16（v1.0）
+
+***
+
+## 目录
+
+1. [背景与问题说明](#1-背景与问题说明)
+2. [整体架构说明](#2-整体架构说明)
+3. [KEY 命名规范](#3-key-命名规范)
+4. [模块缩写对照表](#4-模块缩写对照表)
+5. [公共词条标准库（cip.cmn）](#5-公共词条标准库cipcmn)
+6. [日常开发 SOP](#6-日常开发-sop)
+7. [前端代码使用规范](#7-前端代码使用规范)
+8. [存量重复词条清单](#8-存量重复词条清单)
+9. [存量整理策略](#9-存量整理策略)
+10. [历史文件退出计划](#10-历史文件退出计划)
+11. [常见问题](#11-常见问题)
+
+***
+
+## 1. 背景与问题说明
+
+项目多语言词条统一在后端管理系统中维护，前端通过 `/internationalMain/assemble` 接口获取后注入 Vue i18n。
+
+由于早期缺乏规范，系统中积累了大量**不同 KEY、相同含义**的重复词条：
+
+```
+cip.cmn.btn.saveBtn   = "保存"  ← 公共定义
+datacenter.form.save  = "保存"  ← 数据中台重复
+qm.btn.saveBtn        = "保存"  ← 质量模块重复
+```
+
+统计发现："删除成功"有 9 处定义，"新增成功"有 8 处，"导出"有 6 处，详见第 8 节。
+
+**根本原因：** 创建词条时没有查重提示，新建比查找更省力。
+
+**本规范目标：** 防止新增重复、统一命名风格、给存量整理提供路径。
+
+***
+
+## 2. 整体架构说明
+
+```
+后端管理系统  →  统一维护所有词条（中文 / 英文 / 俄文）
+                  按平台分类：PC端 / 移动端 / 公共
+      ↓  /internationalMain/assemble
+前端项目      →  src/lang/index.js 注入 Vue i18n
+                  组件中通过 $t('KEY') 调用
+```
+
+`src/lang/*.js` 为历史遗留文件，**新词条一律在后端管理系统创建，不再修改本地文件**。
+
+***
+
+## 3. KEY 命名规范
+
+### 3.1 三层结构
+
+词条归属分三个层级，按复用范围判断放哪一层：
+
+| 层级    | KEY 格式                   | 适用场景                   |
+| ----- | ------------------------ | ---------------------- |
+| 跨模块公共 | `cip.cmn.{分类}.{词}`       | 所有模块都能用，如"保存"、"取消"     |
+| 模块内公共 | `cip.{模块}.cmn.{分类}.{词}`  | 同模块不同页面共用，如质检模块的"质检日期" |
+| 页面私有  | `cip.{模块}.{页面}.{分类}.{词}` | 只有某个页面用                |
+
+**判断原则（只有一条）：**
+
+> 这个词，换一个模块还能用吗？
+>
+> - 能用 → 放 `cip.cmn`
+> - 同模块其他页面能用 → 放 `cip.{模块}.cmn`
+> - 只有这个页面用 → 放 `cip.{模块}.{页面}`
+
+```
+"保存"      任何模块都用        →  cip.cmn.btn.saveBtn
+"质检日期"  质检模块多个页面用  →  cip.qm.cmn.field.inspectionDate
+"质检结论"  只有质检记录页用    →  cip.qm.inspection.field.conclusion
+```
+
+### 3.2 分类约定
+
+| 分类            | 含义               | 典型场景            |
+| ------------- | ---------------- | --------------- |
+| `btn`         | 按钮文字             | 保存、取消、新增        |
+| `title`       | 页面 / 弹窗标题        | 新增工单、编辑参数       |
+| `field`       | 表单字段标签           | 工单编号、创建人        |
+| `col`         | 表格列头             | 序号、状态、操作        |
+| `msg`         | 操作反馈消息（弹窗/Toast） | 保存成功、确认删除？      |
+| `tip`         | 页面内静态说明文字        | 表单上方引导语、字段旁辅助说明 |
+| `status`      | 状态值的显示文本         | 草稿、已提交、已审核      |
+| `placeholder` | 输入框占位符           | 请输入名称、请选择日期     |
+| `tab`         | Tab 页签文字         | 基本信息、详情、历史      |
+| `rule`        | 表单校验提示           | 不能为空、长度超限       |
+
+**`msg`** **与** **`tip`** **的区别：**
+
+```
+msg  →  操作触发的反馈弹窗或 Toast
+        this.$message.success(this.$t('cip.cmn.msg.saveSuccess'))
+
+tip  →  页面内始终显示的静态说明文字
+        <p class="tip">{{ $t('cip.qm.inspection.tip.remark') }}</p>
+```
+
+**遇到以下写法时统一归并：**
+
+- `form` / `label` → 校验文本用 `rule`，字段标签用 `field`
+- `columns` → 统一用 `col`
+- `txt` / `info` / `text` → 根据语义归入 `field` 或 `title`
+
+### 3.3 命名风格
+
+- 统一使用 **camelCase** 小驼峰，禁止下划线或全大写
+- KEY 层级控制在 **4\~5 层**，不要过深
+- 具体词要有实际含义，禁止 `btn1`、`text2` 等无意义命名
+
+```
+✅ cip.qm.inspection.title.addRecord
+✅ cip.cmn.btn.saveBtn
+❌ cip.qm.add                                （太短，语义不明）
+❌ cip.qm.inspection.detail.field.item.code  （超过 5 层）
+❌ cip.qm.inspection_field_conclusion        （下划线，不统一）
+```
+
+***
+
+## 4. 模块缩写对照表
+
+**不允许自造缩写**，新模块接入前联系前端负责人在此表补充后再使用。
+
+| 缩写              | 含义                | 适用项目           |
+| --------------- | ----------------- | -------------- |
+| `cip.cmn`       | 跨模块公共词条           | 所有项目           |
+| `cip.plat`      | 平台基础（用户、角色、权限、菜单） | 所有项目           |
+| `cip.qm`        | 质量管理              | sinoma-dcc-web |
+| `cip.pm`        | 生产管理              | sinoma-dcc-web |
+| `cip.dc`        | 数据中台              | sinoma-dcc-web |
+| `cip.cps`       | 配置参数系统            | sinoma-dcc-web |
+| `cip.md`        | 水分系数              | sinoma-dcc-web |
+| `cip.equipment` | 设备管理              | sinoma-dcc-web |
+
+***
+
+## 5. 公共词条标准库（cip.cmn）
+
+**新建词条前必须先查这张表，有就直接用，不要重复创建。**
+
+### 5.1 按钮（cip.cmn.btn）
+
+| KEY                           | 中文    | 英文               |
+| ----------------------------- | ----- | ---------------- |
+| cip.cmn.btn.addBtn            | 新增    | Add              |
+| cip.cmn.btn.addChildBtn       | 新增子项  | Add Child        |
+| cip.cmn.btn.saveLineBtn       | 新增一行  | Add Row          |
+| cip.cmn.btn.editBtn           | 编辑    | Edit             |
+| cip.cmn.btn.revBtn            | 修改    | Modify           |
+| cip.cmn.btn.saveBtn           | 保存    | Save             |
+| cip.cmn.btn.saveBackBtn       | 保存并返回 | Save & Back      |
+| cip.cmn.btn.saveAndAddBtn     | 保存并新增 | Save & Add       |
+| cip.cmn.btn.delBtn            | 删除    | Delete           |
+| cip.cmn.btn.viewBtn           | 查看    | View             |
+| cip.cmn.btn.viewDataBtn       | 查看详情  | View Detail      |
+| cip.cmn.btn.detailBtn         | 明细    | Detail           |
+| cip.cmn.btn.celBtn            | 取消    | Cancel           |
+| cip.cmn.btn.defBtn            | 确定    | OK               |
+| cip.cmn.btn.confirm           | 确认    | Confirm          |
+| cip.cmn.btn.clearBtn          | 清空    | Clear            |
+| cip.cmn.btn.submitBtn         | 提交    | Submit           |
+| cip.cmn.btn.unSubmitBtn       | 撤回    | Withdraw         |
+| cip.cmn.btn.backBtn           | 取回    | Retrieve         |
+| cip.cmn.btn.goBackBtn         | 返回    | Back             |
+| cip.cmn.btn.returnLoginBtn    | 返回登录页 | Back to Login    |
+| cip.cmn.btn.exportBtn         | 导出    | Export           |
+| cip.cmn.btn.exportTemplateBtn | 导出模版  | Export Template  |
+| cip.cmn.btn.importBtn         | 导入    | Import           |
+| cip.cmn.btn.uploadBtn         | 上传    | Upload           |
+| cip.cmn.btn.downloadBtn       | 下载    | Download         |
+| cip.cmn.btn.print             | 打印    | Print            |
+| cip.cmn.btn.copyBtn           | 复制    | Copy             |
+| cip.cmn.btn.enable            | 启用    | Enable           |
+| cip.cmn.btn.disable           | 禁用    | Disable          |
+| cip.cmn.btn.disableBtn        | 停用    | Deactivate       |
+| cip.cmn.btn.invalidBtn        | 失效    | Invalid          |
+| cip.cmn.btn.publishBtn        | 发布    | Publish          |
+| cip.cmn.btn.initiateBtn       | 发起    | Initiate         |
+| cip.cmn.btn.audit             | 审核    | Audit            |
+| cip.cmn.btn.approve           | 审批    | Approve          |
+| cip.cmn.btn.send              | 发送    | Send             |
+| cip.cmn.btn.generateBtn       | 生成    | Generate         |
+| cip.cmn.btn.calBtn            | 计算    | Calculate        |
+| cip.cmn.btn.startBtn          | 启动    | Start            |
+| cip.cmn.btn.stopBtn           | 停止    | Stop             |
+| cip.cmn.btn.refreshBtn        | 刷新    | Refresh          |
+| cip.cmn.btn.configBtn         | 配置    | Config           |
+| cip.cmn.btn.modelEdit         | 模板编辑  | Template Edit    |
+| cip.cmn.btn.dispatchBtn       | 调度    | Dispatch         |
+| cip.cmn.btn.dealBtn           | 处理    | Handle           |
+| cip.cmn.btn.fillingBtn        | 填报    | Fill             |
+| cip.cmn.btn.choice            | 选择    | Select           |
+| cip.cmn.btn.chooseItemBtn     | 选择物料  | Select Material  |
+| cip.cmn.btn.handle            | 操作    | Action           |
+| cip.cmn.btn.historyBtn        | 历史记录  | History          |
+| cip.cmn.btn.viewProcessBtn    | 流程查看  | View Process     |
+| cip.cmn.btn.processBtn        | 流程进度  | Process Progress |
+| cip.cmn.btn.execute           | 执行    | Execute          |
+| cip.cmn.btn.resetCacheBtn     | 重置缓存  | Reset Cache      |
+| cip.cmn.btn.logout            | 注销    | Logout           |
+
+> **注意：** `validBtn`（历史遗留）与 `enable` 含义相同，新代码统一使用 `cip.cmn.btn.enable`。
+
+### 5.2 成功提示（cip.cmn.msg.success）
+
+| KEY                        | 中文   | 英文                     |
+| -------------------------- | ---- | ---------------------- |
+| cip.cmn.msg.addSuccess     | 新增成功 | Added successfully     |
+| cip.cmn.msg.updataSuccess  | 修改成功 | Updated successfully   |
+| cip.cmn.msg.delSuccess     | 删除成功 | Deleted successfully   |
+| cip.cmn.msg.operateSuccess | 操作成功 | Operation successful   |
+| cip.cmn.msg.saveSuccess    | 保存成功 | Saved successfully     |
+| cip.cmn.msg.submitSuccess  | 提交成功 | Submitted successfully |
+| cip.cmn.msg.importSuccess  | 导入成功 | Imported successfully  |
+| cip.cmn.msg.exportSuccess  | 导出成功 | Exported successfully  |
+| cip.cmn.msg.enableSuccess  | 启用成功 | Enabled successfully   |
+| cip.cmn.msg.disableSuccess | 禁用成功 | Disabled successfully  |
+| cip.cmn.msg.backSuccess    | 取回成功 | Retrieved successfully |
+| cip.cmn.msg.auditSuccess   | 审核成功 | Audited successfully   |
+
+### 5.3 失败提示（cip.cmn.msg.error）
+
+| KEY                       | 中文     | 英文                  |
+| ------------------------- | ------ | ------------------- |
+| cip.cmn.msg.addError      | 新增失败   | Add failed          |
+| cip.cmn.msg.updataError   | 修改失败   | Update failed       |
+| cip.cmn.msg.delError      | 删除失败   | Delete failed       |
+| cip.cmn.msg.operateError  | 操作失败   | Operation failed    |
+| cip.cmn.msg.saveError     | 保存失败   | Save failed         |
+| cip.cmn.msg.submitError   | 提交失败   | Submit failed       |
+| cip.cmn.msg.importError   | 导入失败   | Import failed       |
+| cip.cmn.msg.exportError   | 导出失败   | Export failed       |
+| cip.cmn.msg.serviceError  | 调用服务异常 | Service call failed |
+| cip.cmn.msg.generateError | 数据生成失败 | Generate failed     |
+
+### 5.4 警告确认（cip.cmn.msg.warning）
+
+| KEY                                  | 中文               | 英文                                                  |
+| ------------------------------------ | ---------------- | --------------------------------------------------- |
+| cip.cmn.msg.delWarning               | 确定删除数据？          | Confirm delete?                                     |
+| cip.cmn.msg.updataWarning            | 确定修改数据？          | Confirm update?                                     |
+| cip.cmn.msg.selectWarning            | 请选择数据            | Please select data                                  |
+| cip.cmn.msg.selectOneWarning         | 只能选择一条数据         | Select only one record                              |
+| cip.cmn.msg.leastOneWarning          | 请至少选择一条数据        | Select at least one record                          |
+| cip.cmn.msg.addWarning               | 请先保存数据           | Please save first                                   |
+| cip.cmn.msg.editWarning              | 请选择要编辑的数据        | Please select a record to edit                      |
+| cip.cmn.msg.deleteWarning            | 请选择要删除的数据        | Please select a record to delete                    |
+| cip.cmn.msg.submitData               | 提交后数据将无法更改，是否继续？ | Data cannot be modified after submission. Continue? |
+| cip.cmn.msg.unSubmitData             | 确认撤回选择的记录？       | Confirm withdrawal?                                 |
+| cip.cmn.msg.validWarning             | 是否启用该条数据？        | Enable this record?                                 |
+| cip.cmn.msg.invalidWarning           | 是否禁用该条数据？        | Disable this record?                                |
+| cip.cmn.msg.generateWarning          | 是否生成数据？          | Generate data?                                      |
+| cip.cmn.msg.noDataYet                | 暂无数据             | No data available                                   |
+| cip.cmn.msg.modifiedWarning          | 数据未作修改           | No changes made                                     |
+| cip.cmn.msg.conflict                 | 编码已存在            | Code already exists                                 |
+| cip.cmn.msg.retWarning               | 是否返回列表页面？        | Back to list?                                       |
+| cip.cmn.msg.determineDelWarning      | 确定将选择数据删除？       | Confirm delete selected?                            |
+| cip.cmn.msg.startusingWarning        | 确定将选择数据启用？       | Confirm enable selected?                            |
+| cip.cmn.msg.loseefficacyWarning      | 确定将选择数据失效？       | Confirm invalidate selected?                        |
+| cip.cmn.msg.determineUnsubmitWarning | 确定将选择数据撤回？       | Confirm withdraw selected?                          |
+| cip.cmn.msg.hasChildren              | 有子项未删除           | Child items exist                                   |
+
+### 5.5 表单校验（cip.cmn.rule）
+
+| KEY                             | 中文       | 英文                                    |
+| ------------------------------- | -------- | ------------------------------------- |
+| cip.cmn.rule.inputWarning       | 请输入      | Please enter                          |
+| cip.cmn.rule.selectWarning      | 请选择      | Please select                         |
+| cip.cmn.rule.noEmptyWarning     | 不能为空     | Cannot be empty                       |
+| cip.cmn.rule.deleteWarning      | 请删除前后空格  | Please remove leading/trailing spaces |
+| cip.cmn.rule.nameLength2Warning | 长度不能大于20 | Max length is 20                      |
+| cip.cmn.rule.nameLength3Warning | 长度不能大于30 | Max length is 30                      |
+| cip.cmn.rule.nameLength4Warning | 长度不能大于40 | Max length is 40                      |
+| cip.cmn.rule.nameLength6Warning | 长度不能大于60 | Max length is 60                      |
+| cip.cmn.rule.number             | 请输入数字    | Please enter a number                 |
+| cip.cmn.rule.autoValue          | 自动生成     | Auto generated                        |
+
+### 5.6 通用标题（cip.cmn.title）
+
+| KEY                        | 中文 | 英文     |
+| -------------------------- | -- | ------ |
+| cip.cmn.title.add          | 新增 | Add    |
+| cip.cmn.title.edit         | 编辑 | Edit   |
+| cip.cmn.title.view         | 查看 | View   |
+| cip.cmn.title.detail       | 详情 | Detail |
+| cip.cmn.title.list         | 列表 | List   |
+| cip.cmn.title.import       | 导入 | Import |
+| cip.cmn.title.export       | 导出 | Export |
+| cip.cmn.title.config       | 配置 | Config |
+| cip.cmn.title.promptTitle  | 提示 | Tips   |
+| cip.cmn.title.serialNumber | 序号 | No.    |
+
+***
+
+## 6. 日常开发 SOP
+
+新增多语言词条时，严格按以下三步执行：
+
+```
+① 查公共表（第 5 节）
+   有 → 直接用，结束
+
+② 去后端系统按中文值搜索
+   有 → 直接用，结束
+
+③ 按规范新建
+   跨模块公共词  →  cip.cmn.{分类}.{词}
+   模块内公共词  →  cip.{模块}.cmn.{分类}.{词}
+   页面私有词    →  cip.{模块}.{页面}.{分类}.{词}
+   必填：中文、英文；选择对应平台
+```
+
+**三步走，先查后建，不跳过。**
+
+***
+
+## 7. 前端代码使用规范
+
+**模板中：**
+
+```vue
+<!-- ✅ 公共词条 -->
+<el-button>{{ $t('cip.cmn.btn.saveBtn') }}</el-button>
+
+<!-- ✅ 模块内公共词条 -->
+<el-form-item :label="$t('cip.qm.cmn.field.inspectionDate')" />
+
+<!-- ✅ 页面私有词条 -->
+<el-table-column :label="$t('cip.qm.inspection.col.result')" />
+
+<!-- ❌ 禁止硬编码中文 -->
+<el-button>保存</el-button>
+```
+
+**脚本中：**
+
+```javascript
+// ✅ 操作反馈
+this.$message.success(this.$t('cip.cmn.msg.operateSuccess'))
+
+// ✅ 确认弹窗
+this.$confirm(this.$t('cip.cmn.msg.delWarning'))
+
+// ✅ 带变量插值
+this.$t('cip.cmn.msg.total', { n: this.total })
+// 对应词条值：共 {n} 条记录
+
+// ❌ 禁止直接写中文
+this.$message.success('操作成功')
+```
+
+**Code Review 检查项：**
+
+- [ ] 有无用业务 KEY 表达公共含义（保存、取消、删除等）
+- [ ] 有无硬编码中文字符串
+- [ ] 新 KEY 是否符合命名规范（camelCase、4\~5 层、分类正确）
+- [ ] 模块缩写是否在第 4 节对照表中
+
+***
+
+## 8. 存量重复词条清单
+
+以下为已发现的重复词条，整理时优先处理。**标准 KEY** 为应统一使用的目标，旧 KEY 待替换后在后端系统中保留观察一个迭代周期再删除。
+
+### 操作成功类
+
+| 中文   | 标准 KEY                     | 待替换的旧 KEY                               | 所在文件              |
+| ---- | -------------------------- | --------------------------------------- | ----------------- |
+| 保存成功 | cip.cmn.msg.saveSuccess    | datacenter.tips.saveSuccess             | datacenter\_zh.js |
+| 新增成功 | cip.cmn.msg.addSuccess     | shunt.fun.SuccessfullyAdded             | datacenter\_zh.js |
+| 新增成功 | cip.cmn.msg.addSuccess     | transformation.fun.SuccessfullyAdded    | datacenter\_zh.js |
+| 新增成功 | cip.cmn.msg.addSuccess     | injection.fun.SuccessfullyAdded         | datacenter\_zh.js |
+| 删除成功 | cip.cmn.msg.delSuccess     | shunt.fun.DeleteSucceeded               | datacenter\_zh.js |
+| 删除成功 | cip.cmn.msg.delSuccess     | transformation.fun.DeleteSucceeded      | datacenter\_zh.js |
+| 删除成功 | cip.cmn.msg.delSuccess     | injection.fun.DeleteSucceeded           | datacenter\_zh.js |
+| 删除成功 | cip.cmn.msg.delSuccess     | qm.recordV2.tip.del\_success            | qm\_zh.js         |
+| 修改成功 | cip.cmn.msg.updataSuccess  | shunt.fun.ModifiedSuccessfully          | datacenter\_zh.js |
+| 修改成功 | cip.cmn.msg.updataSuccess  | transformation.fun.ModifiedSuccessfully | datacenter\_zh.js |
+| 修改成功 | cip.cmn.msg.updataSuccess  | injection.fun.ModifiedSuccessfully      | datacenter\_zh.js |
+| 提交成功 | cip.cmn.msg.submitSuccess  | qm.recordV2.tip.submit\_success         | qm\_zh.js         |
+| 操作成功 | cip.cmn.msg.operateSuccess | DataDirectory.msg.msg1                  | datacenter\_zh.js |
+
+### 按钮类
+
+| 中文 | 标准 KEY                | 待替换的旧 KEY                          | 所在文件              |
+| -- | --------------------- | ---------------------------------- | ----------------- |
+| 确认 | cip.cmn.btn.confirm   | buttons.confirm                    | datacenter\_zh.js |
+| 确定 | cip.cmn.btn.defBtn    | buttons.query                      | datacenter\_zh.js |
+| 确定 | cip.cmn.btn.defBtn    | shunt.confirmButtonText            | datacenter\_zh.js |
+| 取消 | cip.cmn.btn.celBtn    | buttons.cancel                     | datacenter\_zh.js |
+| 取消 | cip.cmn.btn.celBtn    | shunt.cancelButtonText             | datacenter\_zh.js |
+| 取消 | cip.cmn.btn.celBtn    | transformation.cancelButtonText    | datacenter\_zh.js |
+| 查看 | cip.cmn.btn.viewBtn   | projectlist.listedit.see           | zh.js             |
+| 查看 | cip.cmn.btn.viewBtn   | buttons.detail                     | datacenter\_zh.js |
+| 删除 | cip.cmn.btn.delBtn    | projectlist.listedit.delete        | zh.js             |
+| 删除 | cip.cmn.btn.delBtn    | buttons.delete                     | datacenter\_zh.js |
+| 导出 | cip.cmn.btn.exportBtn | buttons.export                     | datacenter\_zh.js |
+| 导出 | cip.cmn.btn.exportBtn | pm.monthProducePlan.btn.exportPlan | pm\_zh.js         |
+| 导入 | cip.cmn.btn.importBtn | buttons.import                     | datacenter\_zh.js |
+| 导入 | cip.cmn.btn.importBtn | pm.monthProducePlan.btn.importBtn  | pm\_zh.js         |
+| 启用 | cip.cmn.btn.enable    | buttons.enable                     | datacenter\_zh.js |
+| 启用 | cip.cmn.btn.enable    | datacenter.shunt.table.startUsing  | datacenter\_zh.js |
+| 禁用 | cip.cmn.btn.disable   | buttons.deactivate                 | datacenter\_zh.js |
+| 禁用 | cip.cmn.btn.disable   | datacenter.shunt.table.forbidden   | datacenter\_zh.js |
+
+> 共发现约 **35 处**可替换的重复定义，主要集中在 datacenter\_zh.js 和 qm\_zh.js。
+> 旧 KEY（如 qm.recordV2.tip.del\_success）命名不符合当前规范（含下划线），替换时一并修正。
+
+***
+
+## 9. 存量整理策略
+
+**原则：不做大规模迁移，随迭代逐步推进，降低风险。**
+
+| 阶段   | 时间    | 内容                           |
+| ---- | ----- | ---------------------------- |
+| 第一阶段 | 即刻    | 确认 cip.cmn 标准词条已录入后端系统，发布本规范 |
+| 第二阶段 | 即刻起   | 所有新词条严格遵守规范，不再产生新重复          |
+| 第三阶段 | 随迭代推进 | 迭代哪个模块，顺带替换该模块内的重复旧 KEY      |
+
+**迁移操作步骤：**
+
+```bash
+# 1. 搜索旧 KEY 的所有引用位置
+grep -r "旧KEY路径" src/views/
+
+# 2. 编辑器全局替换为标准 KEY
+
+# 3. 旧词条在后端系统中标记为"待删除"，保留一个迭代周期
+#    确认无引用后再从系统中删除
+```
+
+***
+
+## 10. 历史文件退出计划
+
+`src/lang/*.js` 为历史遗留文件，当前与后端系统双轨并存，相同 KEY 以后端系统为准。
+
+| 阶段 | 操作                          |
+| -- | --------------------------- |
+| 近期 | 新词条只在后端系统创建，不再动本地文件         |
+| 中期 | 本地文件只读，停止维护                 |
+| 远期 | 本地词条全量导入后端系统，删除 src/lang 目录 |
+
+***
+
+## 11. 常见问题
+
+**Q：文案相同但语境不同，能共用 KEY 吗？**
+不能。"确认"按钮用 `cip.cmn.btn.confirm`，"确认收货"是业务动作，单独建 `cip.qm.order.btn.confirmReceipt`。文案必须**完全一致且含义相同**，才共用公共 KEY。
+
+**Q：同模块多页面都用的字段放哪里？**
+放模块内公共层：`cip.{模块}.cmn.{分类}.{词}`，如 `cip.qm.cmn.field.inspectionDate`。
+
+**Q：带变量的文案怎么处理？**
+纯通用的放 cmn（如"共 {n} 条记录"），含业务名词的放业务模块（如"删除工单成功"）。
+
+**Q：俄文谁来填？**
+开发者只填中文和英文，俄文留空，由翻译人员定期批量补充。系统已配置 `fallbackLocale: 'zh'`，缺失时回退中文显示，不会显示裸 KEY。
+
+**Q：新模块用什么缩写？**
+查第 4 节对照表，没有的联系前端负责人确认后补充，不要自己创建。
+
+**Q：系统没有查重功能怎么办？**
+使用系统现有的「按中文值搜索」功能确认是否存在。后续计划在新建词条表单中加自动查重提示，改动约 20 行前端代码，可安排近期迭代实现。
+
+**Q：旧 KEY 什么时候可以从系统中删除？**
+替换代码引用后，旧 KEY 继续保留在后端系统中（仍能返回翻译），观察一个完整迭代周期（约 2 周），确认无任何页面报缺失后再删除。删除前可在系统备注中标记"待删除"便于识别。
+
+***
+
+## 附录：新增词条快速参考
+
+```
+① 查公共表（第 5 节）→ 有就用
+② 查后端系统（按中文搜索）→ 有就用
+③ 没有再新建：
+   公共词  cip.cmn.{分类}.{词}
+   模块公共  cip.{模块}.cmn.{分类}.{词}
+   页面私有  cip.{模块}.{页面}.{分类}.{词}
+   中英文必填 · camelCase · 4~5 层
+
+分类速查：
+  btn 按钮        title 标题       field 字段标签
+  col 表格列头    msg 操作反馈     tip 静态说明
+  status 状态值   tab 页签         placeholder 占位符
+  rule 校验提示
+```
+

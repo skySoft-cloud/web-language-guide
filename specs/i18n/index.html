@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多语言（i18n）使用规范 - 开发规范指南</title>
+<link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+
+<div class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">&#9776;</div>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>开发规范指南</h1>
+      <div class="version">v1.0 &middot; 2026-06-16</div>
+      <div class="tagline">统一标准 · 高效协作</div>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <div class="nav-group">站点</div>
+      <a href="../../index.html"><span class="icon">🏠</span>首页</a>
+      <a href="../index.html"><span class="icon">📋</span>规范列表</a>
+      <div class="nav-group">总览</div>
+      <a href="#s1">1. 背景与问题说明</a>
+      <a href="#s2">2. 整体架构说明</a>
+      <div class="nav-group">命名规范</div>
+      <a href="#s3">3. KEY 命名规范</a>
+      <a href="#s3-1" class="sub">3.1 三层结构</a>
+      <a href="#s3-2" class="sub">3.2 分类约定</a>
+      <a href="#s3-3" class="sub">3.3 命名风格</a>
+      <a href="#s4">4. 模块缩写对照表</a>
+      <div class="nav-group">标准词条</div>
+      <a href="#s5">5. 公共词条标准库</a>
+      <a href="#s5-1" class="sub">5.1 按钮 btn</a>
+      <a href="#s5-2" class="sub">5.2 成功提示</a>
+      <a href="#s5-3" class="sub">5.3 失败提示</a>
+      <a href="#s5-4" class="sub">5.4 警告确认</a>
+      <a href="#s5-5" class="sub">5.5 表单校验</a>
+      <a href="#s5-6" class="sub">5.6 通用标题</a>
+      <div class="nav-group">开发指南</div>
+      <a href="#s6">6. 日常开发 SOP</a>
+      <a href="#s7">7. 前端代码使用规范</a>
+      <div class="nav-group">存量治理</div>
+      <a href="#s8">8. 存量重复词条清单</a>
+      <a href="#s9">9. 存量整理策略</a>
+      <a href="#s10">10. 历史文件退出计划</a>
+      <div class="nav-group">其他</div>
+      <a href="#s11">11. 常见问题</a>
+      <a href="#s-appendix">附录：快速参考</a>
+    </nav>
+    <div class="sidebar-footer">
+      sinoma-dcc-web &middot; 前端团队
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="content">
+
+      <div class="page-header">
+        <h2>多语言（i18n）使用规范</h2>
+        <div class="meta">
+          <span><span class="dot"></span>sinoma-dcc-web 及关联前端项目</span>
+          <span><span class="dot"></span>维护团队：前端团队</span>
+          <span><span class="dot"></span>更新日期：2026-06-16</span>
+        </div>
+      </div>
+
+      <div class="section" id="s1">
+        <h2><span class="num">1</span>背景与问题说明</h2>
+        <p>项目多语言词条统一在后端管理系统中维护，前端通过 <code>/internationalMain/assemble</code> 接口获取后注入 Vue i18n。</p>
+        <p>由于早期缺乏规范，系统中积累了大量<strong>不同 KEY、相同含义</strong>的重复词条：</p>
+<pre><code>cip.cmn.btn.saveBtn   = "保存"  ← 公共定义
+datacenter.form.save  = "保存"  ← 数据中台重复
+qm.btn.saveBtn        = "保存"  ← 质量模块重复</code></pre>
+        <p>统计发现："删除成功"有 9 处定义，"新增成功"有 8 处，"导出"有 6 处，详见第 8 节。</p>
+        <div class="callout callout-orange">
+          <span class="callout-icon">&#9888;</span>
+          <div><strong>根本原因：</strong>创建词条时没有查重提示，新建比查找更省力。<br><strong>本规范目标：</strong>防止新增重复、统一命名风格、给存量整理提供路径。</div>
+        </div>
+      </div>
+
+      <div class="section" id="s2">
+        <h2><span class="num">2</span>整体架构说明</h2>
+        <div class="arch">
+          <div class="arch-row">
+            <div class="arch-box">后端管理系统</div>
+          </div>
+          <div style="margin:6px 0;">
+            <div class="arch-detail">统一维护所有词条（中文 / 英文 / 俄文），按平台分类：PC端 / 移动端 / 公共</div>
+          </div>
+          <div class="arch-row" style="margin:8px 0;">
+            <span class="arch-arrow">&#8595;</span>
+            <span class="arch-label">/internationalMain/assemble</span>
+          </div>
+          <div class="arch-row">
+            <div class="arch-box">前端项目</div>
+          </div>
+          <div style="margin-top:6px;">
+            <div class="arch-detail">src/lang/index.js 注入 Vue i18n &mdash; 组件中通过 $t('KEY') 调用</div>
+          </div>
+        </div>
+        <div class="callout callout-blue">
+          <span class="callout-icon">&#9432;</span>
+          <div><code>src/lang/*.js</code> 为历史遗留文件，<strong>新词条一律在后端管理系统创建，不再修改本地文件</strong>。</div>
+        </div>
+      </div>
+
+      <div class="section" id="s3">
+        <h2><span class="num">3</span>KEY 命名规范</h2>
+
+        <h3 id="s3-1">3.1 三层结构</h3>
+        <p>词条归属分三个层级，按复用范围判断放哪一层：</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>层级</th><th>KEY 格式</th><th>适用场景</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge badge-blue">跨模块公共</span></td><td><code>cip.cmn.{分类}.{词}</code></td><td>所有模块都能用，如"保存"、"取消"</td></tr>
+              <tr><td><span class="badge badge-green">模块内公共</span></td><td><code>cip.{模块}.cmn.{分类}.{词}</code></td><td>同模块不同页面共用，如质检模块的"质检日期"</td></tr>
+              <tr><td><span class="badge badge-orange">页面私有</span></td><td><code>cip.{模块}.{页面}.{分类}.{词}</code></td><td>只有某个页面用</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong>判断原则（只有一条）：</strong>这个词，换一个模块还能用吗？</p>
+        <div class="decision">
+          <div class="decision-row"><span class="decision-if">能用 &rarr;</span> <span class="decision-key">cip.cmn.{分类}.{词}</span></div>
+          <div class="decision-row"><span class="decision-if">同模块其他页面能用 &rarr;</span> <span class="decision-key">cip.{模块}.cmn.{分类}.{词}</span></div>
+          <div class="decision-row"><span class="decision-if">只有这个页面用 &rarr;</span> <span class="decision-key">cip.{模块}.{页面}.{分类}.{词}</span></div>
+        </div>
+
+<pre><code>"保存"      任何模块都用        →  cip.cmn.btn.saveBtn
+"质检日期"  质检模块多个页面用  →  cip.qm.cmn.field.inspectionDate
+"质检结论"  只有质检记录页用    →  cip.qm.inspection.field.conclusion</code></pre>
+
+        <h3 id="s3-2">3.2 分类约定</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>分类</th><th>含义</th><th>典型场景</th></tr></thead>
+            <tbody>
+              <tr><td><code>btn</code></td><td>按钮文字</td><td>保存、取消、新增</td></tr>
+              <tr><td><code>title</code></td><td>页面 / 弹窗标题</td><td>新增工单、编辑参数</td></tr>
+              <tr><td><code>field</code></td><td>表单字段标签</td><td>工单编号、创建人</td></tr>
+              <tr><td><code>col</code></td><td>表格列头</td><td>序号、状态、操作</td></tr>
+              <tr><td><code>msg</code></td><td>操作反馈消息（弹窗/Toast）</td><td>保存成功、确认删除？</td></tr>
+              <tr><td><code>tip</code></td><td>页面内静态说明文字</td><td>表单上方引导语、字段旁辅助说明</td></tr>
+              <tr><td><code>status</code></td><td>状态值的显示文本</td><td>草稿、已提交、已审核</td></tr>
+              <tr><td><code>placeholder</code></td><td>输入框占位符</td><td>请输入名称、请选择日期</td></tr>
+              <tr><td><code>tab</code></td><td>Tab 页签文字</td><td>基本信息、详情、历史</td></tr>
+              <tr><td><code>rule</code></td><td>表单校验提示</td><td>不能为空、长度超限</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><strong><code>msg</code> 与 <code>tip</code> 的区别：</strong></p>
+<pre><code>msg  →  操作触发的反馈弹窗或 Toast
+        this.$message.success(this.$t('cip.cmn.msg.saveSuccess'))
+
+tip  →  页面内始终显示的静态说明文字
+        &lt;p class="tip"&gt;{{ $t('cip.qm.inspection.tip.remark') }}&lt;/p&gt;</code></pre>
+
+        <p><strong>遇到以下写法时统一归并：</strong></p>
+        <ul>
+          <li><code>form</code> / <code>label</code> &rarr; 校验文本用 <code>rule</code>，字段标签用 <code>field</code></li>
+          <li><code>columns</code> &rarr; 统一用 <code>col</code></li>
+          <li><code>txt</code> / <code>info</code> / <code>text</code> &rarr; 根据语义归入 <code>field</code> 或 <code>title</code></li>
+        </ul>
+
+        <h3 id="s3-3">3.3 命名风格</h3>
+        <ul>
+          <li>统一使用 <strong>camelCase</strong> 小驼峰，禁止下划线或全大写</li>
+          <li>KEY 层级控制在 <strong>4~5 层</strong>，不要过深</li>
+          <li>具体词要有实际含义，禁止 <code>btn1</code>、<code>text2</code> 等无意义命名</li>
+        </ul>
+        <div class="example">
+          <div class="example-col">
+            <div class="example-label good">&#10003; 正确</div>
+<pre><code>cip.qm.inspection.title.addRecord
+cip.cmn.btn.saveBtn</code></pre>
+          </div>
+          <div class="example-col">
+            <div class="example-label bad">&#10007; 错误</div>
+<pre><code>cip.qm.add                          （太短，语义不明）
+cip.qm.inspection.detail.field.item.code  （超过 5 层）
+cip.qm.inspection_field_conclusion  （下划线，不统一）</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="section" id="s4">
+        <h2><span class="num">4</span>模块缩写对照表</h2>
+        <div class="callout callout-red">
+          <span class="callout-icon">&#9888;</span>
+          <div><strong>不允许自造缩写</strong>，新模块接入前联系前端负责人在此表补充后再使用。</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>缩写</th><th>含义</th><th>适用项目</th></tr></thead>
+            <tbody>
+              <tr><td><code>cip.cmn</code></td><td>跨模块公共词条</td><td>所有项目</td></tr>
+              <tr><td><code>cip.plat</code></td><td>平台基础（用户、角色、权限、菜单）</td><td>所有项目</td></tr>
+              <tr><td><code>cip.qm</code></td><td>质量管理</td><td>sinoma-dcc-web</td></tr>
+              <tr><td><code>cip.pm</code></td><td>生产管理</td><td>sinoma-dcc-web</td></tr>
+              <tr><td><code>cip.dc</code></td><td>数据中台</td><td>sinoma-dcc-web</td></tr>
+              <tr><td><code>cip.cps</code></td><td>配置参数系统</td><td>sinoma-dcc-web</td></tr>
+              <tr><td><code>cip.md</code></td><td>水分系数</td><td>sinoma-dcc-web</td></tr>
+              <tr><td><code>cip.equipment</code></td><td>设备管理</td><td>sinoma-dcc-web</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section" id="s5">
+        <h2><span class="num">5</span>公共词条标准库（cip.cmn）</h2>
+        <div class="callout callout-green">
+          <span class="callout-icon">&#9733;</span>
+          <div><strong>新建词条前必须先查这张表，有就直接用，不要重复创建。</strong></div>
+        </div>
+
+        <h3 id="s5-1">5.1 按钮（cip.cmn.btn）</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
+            <tbody>
+              <tr><td><code>cip.cmn.btn.addBtn</code></td><td>新增</td><td>Add</td></tr>
+              <tr><td><code>cip.cmn.btn.addChildBtn</code></td><td>新增子项</td><td>Add Child</td></tr>
+              <tr><td><code>cip.cmn.btn.saveLineBtn</code></td><td>新增一行</td><td>Add Row</td></tr>
+              <tr><td><code>cip.cmn.btn.editBtn</code></td><td>编辑</td><td>Edit</td></tr>
+              <tr><td><code>cip.cmn.btn.revBtn</code></td><td>修改</td><td>Modify</td></tr>
+              <tr><td><code>cip.cmn.btn.saveBtn</code></td><td>保存</td><td>Save</td></tr>
+              <tr><td><code>cip.cmn.btn.saveBackBtn</code></td><td>保存并返回</td><td>Save &amp; Back</td></tr>
+              <tr><td><code>cip.cmn.btn.saveAndAddBtn</code></td><td>保存并新增</td><td>Save &amp; Add</td></tr>
+              <tr><td><code>cip.cmn.btn.delBtn</code></td><td>删除</td><td>Delete</td></tr>
+              <tr><td><code>cip.cmn.btn.viewBtn</code></td><td>查看</td><td>View</td></tr>
+              <tr><td><code>cip.cmn.btn.viewDataBtn</code></td><td>查看详情</td><td>View Detail</td></tr>
+              <tr><td><code>cip.cmn.btn.detailBtn</code></td><td>明细</td><td>Detail</td></tr>
+              <tr><td><code>cip.cmn.btn.celBtn</code></td><td>取消</td><td>Cancel</td></tr>
+              <tr><td><code>cip.cmn.btn.defBtn</code></td><td>确定</td><td>OK</td></tr>
+              <tr><td><code>cip.cmn.btn.confirm</code></td><td>确认</td><td>Confirm</td></tr>
+              <tr><td><code>cip.cmn.btn.clearBtn</code></td><td>清空</td><td>Clear</td></tr>
+              <tr><td><code>cip.cmn.btn.submitBtn</code></td><td>提交</td><td>Submit</td></tr>
+              <tr><td><code>cip.cmn.btn.unSubmitBtn</code></td><td>撤回</td><td>Withdraw</td></tr>
+              <tr><td><code>cip.cmn.btn.backBtn</code></td><td>取回</td><td>Retrieve</td></tr>
+              <tr><td><code>cip.cmn.btn.goBackBtn</code></td><td>返回</td><td>Back</td></tr>
+              <tr><td><code>cip.cmn.btn.returnLoginBtn</code></td><td>返回登录页</td><td>Back to Login</td></tr>
+              <tr><td><code>cip.cmn.btn.exportBtn</code></td><td>导出</td><td>Export</td></tr>
+              <tr><td><code>cip.cmn.btn.exportTemplateBtn</code></td><td>导出模版</td><td>Export Template</td></tr>
+              <tr><td><code>cip.cmn.btn.importBtn</code></td><td>导入</td><td>Import</td></tr>
+              <tr><td><code>cip.cmn.btn.uploadBtn</code></td><td>上传</td><td>Upload</td></tr>
+              <tr><td><code>cip.cmn.btn.downloadBtn</code></td><td>下载</td><td>Download</td></tr>
+              <tr><td><code>cip.cmn.btn.print</code></td><td>打印</td><td>Print</td></tr>
+              <tr><td><code>cip.cmn.btn.copyBtn</code></td><td>复制</td><td>Copy</td></tr>
+              <tr><td><code>cip.cmn.btn.enable</code></td><td>启用</td><td>Enable</td></tr>
+              <tr><td><code>cip.cmn.btn.disable</code></td><td>禁用</td><td>Disable</td></tr>
+              <tr><td><code>cip.cmn.btn.disableBtn</code></td><td>停用</td><td>Deactivate</td></tr>
+              <tr><td><code>cip.cmn.btn.invalidBtn</code></td><td>失效</td><td>Invalid</td></tr>
+              <tr><td><code>cip.cmn.btn.publishBtn</code></td><td>发布</td><td>Publish</td></tr>
+              <tr><td><code>cip.cmn.btn.initiateBtn</code></td><td>发起</td><td>Initiate</td></tr>
+              <tr><td><code>cip.cmn.btn.audit</code></td><td>审核</td><td>Audit</td></tr>
+              <tr><td><code>cip.cmn.btn.approve</code></td><td>审批</td><td>Approve</td></tr>
+              <tr><td><code>cip.cmn.btn.send</code></td><td>发送</td><td>Send</td></tr>
+              <tr><td><code>cip.cmn.btn.generateBtn</code></td><td>生成</td><td>Generate</td></tr>
+              <tr><td><code>cip.cmn.btn.calBtn</code></td><td>计算</td><td>Calculate</td></tr>
+              <tr><td><code>cip.cmn.btn.startBtn</code></td><td>启动</td><td>Start</td></tr>
+              <tr><td><code>cip.cmn.btn.stopBtn</code></td><td>停止</td><td>Stop</td></tr>
+              <tr><td><code>cip.cmn.btn.refreshBtn</code></td><td>刷新</td><td>Refresh</td></tr>
+              <tr><td><code>cip.cmn.btn.configBtn</code></td><td>配置</td><td>Config</td></tr>
+              <tr><td><code>cip.cmn.btn.modelEdit</code></td><td>模板编辑</td><td>Template Edit</td></tr>
+              <tr><td><code>cip.cmn.btn.dispatchBtn</code></td><td>调度</td><td>Dispatch</td></tr>
+              <tr><td><code>cip.cmn.btn.dealBtn</code></td><td>处理</td><td>Handle</td></tr>
+              <tr><td><code>cip.cmn.btn.fillingBtn</code></td><td>填报</td><td>Fill</td></tr>
+              <tr><td><code>cip.cmn.btn.choice</code></td><td>选择</td><td>Select</td></tr>
+              <tr><td><code>cip.cmn.btn.chooseItemBtn</code></td><td>选择物料</td><td>Select Material</td></tr>
+              <tr><td><code>cip.cmn.btn.handle</code></td><td>操作</td><td>Action</td></tr>
+              <tr><td><code>cip.cmn.btn.historyBtn</code></td><td>历史记录</td><td>History</td></tr>
+              <tr><td><code>cip.cmn.btn.viewProcessBtn</code></td><td>流程查看</td><td>View Process</td></tr>
+              <tr><td><code>cip.cmn.btn.processBtn</code></td><td>流程进度</td><td>Process Progress</td></tr>
+              <tr><td><code>cip.cmn.btn.execute</code></td><td>执行</td><td>Execute</td></tr>
+              <tr><td><code>cip.cmn.btn.resetCacheBtn</code></td><td>重置缓存</td><td>Reset Cache</td></tr>
+              <tr><td><code>cip.cmn.btn.logout</code></td><td>注销</td><td>Logout</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-orange">
+          <span class="callout-icon">&#9888;</span>
+          <div><code>validBtn</code>（历史遗留）与 <code>enable</code> 含义相同，新代码统一使用 <code>cip.cmn.btn.enable</code>。</div>
+        </div>
+
+        <h3 id="s5-2">5.2 成功提示（cip.cmn.msg.success）</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
+            <tbody>
+              <tr><td><code>cip.cmn.msg.addSuccess</code></td><td>新增成功</td><td>Added successfully</td></tr>
+              <tr><td><code>cip.cmn.msg.updataSuccess</code></td><td>修改成功</td><td>Updated successfully</td></tr>
+              <tr><td><code>cip.cmn.msg.delSuccess</code></td><td>删除成功</td><td>Deleted successfully</td></tr>
+              <tr><td><code>cip.cmn.msg.operateSuccess</code></td><td>操作成功</td><td>Operation successful</td></tr>
+              <tr><td><code>cip.cmn.msg.saveSuccess</code></td><td>保存成功</td><td>Saved successfully</td></tr>
+              <tr><td><code>cip.cmn.msg.submitSuccess</code></td><td>提交成功</td><td>Submitted successfully</td></tr>
+              <tr><td><code>cip.cmn.msg.importSuccess</code></td><td>导入成功</td><td>Imported successfully</td></tr>
+              <tr><td><code>cip.cmn.msg.exportSuccess</code></td><td>导出成功</td><td>Exported successfully</td></tr>
+              <tr><td><code>cip.cmn.msg.enableSuccess</code></td><td>启用成功</td><td>Enabled successfully</td></tr>
+              <tr><td><code>cip.cmn.msg.disableSuccess</code></td><td>禁用成功</td><td>Disabled successfully</td></tr>
+              <tr><td><code>cip.cmn.msg.backSuccess</code></td><td>取回成功</td><td>Retrieved successfully</td></tr>
+              <tr><td><code>cip.cmn.msg.auditSuccess</code></td><td>审核成功</td><td>Audited successfully</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="s5-3">5.3 失败提示（cip.cmn.msg.error）</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
+            <tbody>
+              <tr><td><code>cip.cmn.msg.addError</code></td><td>新增失败</td><td>Add failed</td></tr>
+              <tr><td><code>cip.cmn.msg.updataError</code></td><td>修改失败</td><td>Update failed</td></tr>
+              <tr><td><code>cip.cmn.msg.delError</code></td><td>删除失败</td><td>Delete failed</td></tr>
+              <tr><td><code>cip.cmn.msg.operateError</code></td><td>操作失败</td><td>Operation failed</td></tr>
+              <tr><td><code>cip.cmn.msg.saveError</code></td><td>保存失败</td><td>Save failed</td></tr>
+              <tr><td><code>cip.cmn.msg.submitError</code></td><td>提交失败</td><td>Submit failed</td></tr>
+              <tr><td><code>cip.cmn.msg.importError</code></td><td>导入失败</td><td>Import failed</td></tr>
+              <tr><td><code>cip.cmn.msg.exportError</code></td><td>导出失败</td><td>Export failed</td></tr>
+              <tr><td><code>cip.cmn.msg.serviceError</code></td><td>调用服务异常</td><td>Service call failed</td></tr>
+              <tr><td><code>cip.cmn.msg.generateError</code></td><td>数据生成失败</td><td>Generate failed</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="s5-4">5.4 警告确认（cip.cmn.msg.warning）</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
+            <tbody>
+              <tr><td><code>cip.cmn.msg.delWarning</code></td><td>确定删除数据？</td><td>Confirm delete?</td></tr>
+              <tr><td><code>cip.cmn.msg.updataWarning</code></td><td>确定修改数据？</td><td>Confirm update?</td></tr>
+              <tr><td><code>cip.cmn.msg.selectWarning</code></td><td>请选择数据</td><td>Please select data</td></tr>
+              <tr><td><code>cip.cmn.msg.selectOneWarning</code></td><td>只能选择一条数据</td><td>Select only one record</td></tr>
+              <tr><td><code>cip.cmn.msg.leastOneWarning</code></td><td>请至少选择一条数据</td><td>Select at least one record</td></tr>
+              <tr><td><code>cip.cmn.msg.addWarning</code></td><td>请先保存数据</td><td>Please save first</td></tr>
+              <tr><td><code>cip.cmn.msg.editWarning</code></td><td>请选择要编辑的数据</td><td>Please select a record to edit</td></tr>
+              <tr><td><code>cip.cmn.msg.deleteWarning</code></td><td>请选择要删除的数据</td><td>Please select a record to delete</td></tr>
+              <tr><td><code>cip.cmn.msg.submitData</code></td><td>提交后数据将无法更改，是否继续？</td><td>Data cannot be modified after submission. Continue?</td></tr>
+              <tr><td><code>cip.cmn.msg.unSubmitData</code></td><td>确认撤回选择的记录？</td><td>Confirm withdrawal?</td></tr>
+              <tr><td><code>cip.cmn.msg.validWarning</code></td><td>是否启用该条数据？</td><td>Enable this record?</td></tr>
+              <tr><td><code>cip.cmn.msg.invalidWarning</code></td><td>是否禁用该条数据？</td><td>Disable this record?</td></tr>
+              <tr><td><code>cip.cmn.msg.generateWarning</code></td><td>是否生成数据？</td><td>Generate data?</td></tr>
+              <tr><td><code>cip.cmn.msg.noDataYet</code></td><td>暂无数据</td><td>No data available</td></tr>
+              <tr><td><code>cip.cmn.msg.modifiedWarning</code></td><td>数据未作修改</td><td>No changes made</td></tr>
+              <tr><td><code>cip.cmn.msg.conflict</code></td><td>编码已存在</td><td>Code already exists</td></tr>
+              <tr><td><code>cip.cmn.msg.retWarning</code></td><td>是否返回列表页面？</td><td>Back to list?</td></tr>
+              <tr><td><code>cip.cmn.msg.determineDelWarning</code></td><td>确定将选择数据删除？</td><td>Confirm delete selected?</td></tr>
+              <tr><td><code>cip.cmn.msg.startusingWarning</code></td><td>确定将选择数据启用？</td><td>Confirm enable selected?</td></tr>
+              <tr><td><code>cip.cmn.msg.loseefficacyWarning</code></td><td>确定将选择数据失效？</td><td>Confirm invalidate selected?</td></tr>
+              <tr><td><code>cip.cmn.msg.determineUnsubmitWarning</code></td><td>确定将选择数据撤回？</td><td>Confirm withdraw selected?</td></tr>
+              <tr><td><code>cip.cmn.msg.hasChildren</code></td><td>有子项未删除</td><td>Child items exist</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="s5-5">5.5 表单校验（cip.cmn.rule）</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
+            <tbody>
+              <tr><td><code>cip.cmn.rule.inputWarning</code></td><td>请输入</td><td>Please enter</td></tr>
+              <tr><td><code>cip.cmn.rule.selectWarning</code></td><td>请选择</td><td>Please select</td></tr>
+              <tr><td><code>cip.cmn.rule.noEmptyWarning</code></td><td>不能为空</td><td>Cannot be empty</td></tr>
+              <tr><td><code>cip.cmn.rule.deleteWarning</code></td><td>请删除前后空格</td><td>Please remove leading/trailing spaces</td></tr>
+              <tr><td><code>cip.cmn.rule.nameLength2Warning</code></td><td>长度不能大于20</td><td>Max length is 20</td></tr>
+              <tr><td><code>cip.cmn.rule.nameLength3Warning</code></td><td>长度不能大于30</td><td>Max length is 30</td></tr>
+              <tr><td><code>cip.cmn.rule.nameLength4Warning</code></td><td>长度不能大于40</td><td>Max length is 40</td></tr>
+              <tr><td><code>cip.cmn.rule.nameLength6Warning</code></td><td>长度不能大于60</td><td>Max length is 60</td></tr>
+              <tr><td><code>cip.cmn.rule.number</code></td><td>请输入数字</td><td>Please enter a number</td></tr>
+              <tr><td><code>cip.cmn.rule.autoValue</code></td><td>自动生成</td><td>Auto generated</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="s5-6">5.6 通用标题（cip.cmn.title）</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
+            <tbody>
+              <tr><td><code>cip.cmn.title.add</code></td><td>新增</td><td>Add</td></tr>
+              <tr><td><code>cip.cmn.title.edit</code></td><td>编辑</td><td>Edit</td></tr>
+              <tr><td><code>cip.cmn.title.view</code></td><td>查看</td><td>View</td></tr>
+              <tr><td><code>cip.cmn.title.detail</code></td><td>详情</td><td>Detail</td></tr>
+              <tr><td><code>cip.cmn.title.list</code></td><td>列表</td><td>List</td></tr>
+              <tr><td><code>cip.cmn.title.import</code></td><td>导入</td><td>Import</td></tr>
+              <tr><td><code>cip.cmn.title.export</code></td><td>导出</td><td>Export</td></tr>
+              <tr><td><code>cip.cmn.title.config</code></td><td>配置</td><td>Config</td></tr>
+              <tr><td><code>cip.cmn.title.promptTitle</code></td><td>提示</td><td>Tips</td></tr>
+              <tr><td><code>cip.cmn.title.serialNumber</code></td><td>序号</td><td>No.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section" id="s6">
+        <h2><span class="num">6</span>日常开发 SOP</h2>
+        <p>新增多语言词条时，严格按以下三步执行：</p>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-num"><div class="circle">1</div><div class="line"></div></div>
+            <div class="flow-content">
+              <div class="title">查公共表（第 5 节）</div>
+              <p>有 &rarr; 直接用，结束</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num"><div class="circle">2</div><div class="line"></div></div>
+            <div class="flow-content">
+              <div class="title">去后端系统按中文值搜索</div>
+              <p>有 &rarr; 直接用，结束</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num"><div class="circle">3</div></div>
+            <div class="flow-content">
+              <div class="title">按规范新建</div>
+              <ul>
+                <li>跨模块公共词 &rarr; <code>cip.cmn.{分类}.{词}</code></li>
+                <li>模块内公共词 &rarr; <code>cip.{模块}.cmn.{分类}.{词}</code></li>
+                <li>页面私有词 &rarr; <code>cip.{模块}.{页面}.{分类}.{词}</code></li>
+              </ul>
+              <p>必填：中文、英文；选择对应平台</p>
+            </div>
+          </div>
+        </div>
+        <div class="callout callout-blue">
+          <span class="callout-icon">&#9432;</span>
+          <div><strong>三步走，先查后建，不跳过。</strong></div>
+        </div>
+      </div>
+
+      <div class="section" id="s7">
+        <h2><span class="num">7</span>前端代码使用规范</h2>
+
+        <h3>模板中</h3>
+        <div class="example">
+          <div class="example-col">
+            <div class="example-label good">&#10003; 正确</div>
+<pre><code>&lt;!-- 公共词条 --&gt;
+&lt;el-button&gt;{{ $t('cip.cmn.btn.saveBtn') }}&lt;/el-button&gt;
+
+&lt;!-- 模块内公共词条 --&gt;
+&lt;el-form-item :label="$t('cip.qm.cmn.field.inspectionDate')" /&gt;
+
+&lt;!-- 页面私有词条 --&gt;
+&lt;el-table-column :label="$t('cip.qm.inspection.col.result')" /&gt;</code></pre>
+          </div>
+          <div class="example-col">
+            <div class="example-label bad">&#10007; 禁止</div>
+<pre><code>&lt;!-- 硬编码中文 --&gt;
+&lt;el-button&gt;保存&lt;/el-button&gt;</code></pre>
+          </div>
+        </div>
+
+        <h3>脚本中</h3>
+        <div class="example">
+          <div class="example-col">
+            <div class="example-label good">&#10003; 正确</div>
+<pre><code>// 操作反馈
+this.$message.success(this.$t('cip.cmn.msg.operateSuccess'))
+
+// 确认弹窗
+this.$confirm(this.$t('cip.cmn.msg.delWarning'))
+
+// 带变量插值
+this.$t('cip.cmn.msg.total', { n: this.total })</code></pre>
+          </div>
+          <div class="example-col">
+            <div class="example-label bad">&#10007; 禁止</div>
+<pre><code>// 直接写中文
+this.$message.success('操作成功')</code></pre>
+          </div>
+        </div>
+
+        <h3>Code Review 检查项</h3>
+        <ul>
+          <li>有无用业务 KEY 表达公共含义（保存、取消、删除等）</li>
+          <li>有无硬编码中文字符串</li>
+          <li>新 KEY 是否符合命名规范（camelCase、4~5 层、分类正确）</li>
+          <li>模块缩写是否在第 4 节对照表中</li>
+        </ul>
+      </div>
+
+      <div class="section" id="s8">
+        <h2><span class="num">8</span>存量重复词条清单</h2>
+        <p>以下为已发现的重复词条，整理时优先处理。<strong>标准 KEY</strong> 为应统一使用的目标，旧 KEY 待替换后在后端系统中保留观察一个迭代周期再删除。</p>
+
+        <h3>操作成功类</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>中文</th><th>标准 KEY</th><th>待替换的旧 KEY</th><th>所在文件</th></tr></thead>
+            <tbody>
+              <tr><td>保存成功</td><td><code>cip.cmn.msg.saveSuccess</code></td><td><code>datacenter.tips.saveSuccess</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>新增成功</td><td><code>cip.cmn.msg.addSuccess</code></td><td><code>shunt.fun.SuccessfullyAdded</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>新增成功</td><td><code>cip.cmn.msg.addSuccess</code></td><td><code>transformation.fun.SuccessfullyAdded</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>新增成功</td><td><code>cip.cmn.msg.addSuccess</code></td><td><code>injection.fun.SuccessfullyAdded</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>删除成功</td><td><code>cip.cmn.msg.delSuccess</code></td><td><code>shunt.fun.DeleteSucceeded</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>删除成功</td><td><code>cip.cmn.msg.delSuccess</code></td><td><code>transformation.fun.DeleteSucceeded</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>删除成功</td><td><code>cip.cmn.msg.delSuccess</code></td><td><code>injection.fun.DeleteSucceeded</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>删除成功</td><td><code>cip.cmn.msg.delSuccess</code></td><td><code>qm.recordV2.tip.del_success</code></td><td>qm_zh.js</td></tr>
+              <tr><td>修改成功</td><td><code>cip.cmn.msg.updataSuccess</code></td><td><code>shunt.fun.ModifiedSuccessfully</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>修改成功</td><td><code>cip.cmn.msg.updataSuccess</code></td><td><code>transformation.fun.ModifiedSuccessfully</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>修改成功</td><td><code>cip.cmn.msg.updataSuccess</code></td><td><code>injection.fun.ModifiedSuccessfully</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>提交成功</td><td><code>cip.cmn.msg.submitSuccess</code></td><td><code>qm.recordV2.tip.submit_success</code></td><td>qm_zh.js</td></tr>
+              <tr><td>操作成功</td><td><code>cip.cmn.msg.operateSuccess</code></td><td><code>DataDirectory.msg.msg1</code></td><td>datacenter_zh.js</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>按钮类</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>中文</th><th>标准 KEY</th><th>待替换的旧 KEY</th><th>所在文件</th></tr></thead>
+            <tbody>
+              <tr><td>确认</td><td><code>cip.cmn.btn.confirm</code></td><td><code>buttons.confirm</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>确定</td><td><code>cip.cmn.btn.defBtn</code></td><td><code>buttons.query</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>确定</td><td><code>cip.cmn.btn.defBtn</code></td><td><code>shunt.confirmButtonText</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>取消</td><td><code>cip.cmn.btn.celBtn</code></td><td><code>buttons.cancel</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>取消</td><td><code>cip.cmn.btn.celBtn</code></td><td><code>shunt.cancelButtonText</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>取消</td><td><code>cip.cmn.btn.celBtn</code></td><td><code>transformation.cancelButtonText</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>查看</td><td><code>cip.cmn.btn.viewBtn</code></td><td><code>projectlist.listedit.see</code></td><td>zh.js</td></tr>
+              <tr><td>查看</td><td><code>cip.cmn.btn.viewBtn</code></td><td><code>buttons.detail</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>删除</td><td><code>cip.cmn.btn.delBtn</code></td><td><code>projectlist.listedit.delete</code></td><td>zh.js</td></tr>
+              <tr><td>删除</td><td><code>cip.cmn.btn.delBtn</code></td><td><code>buttons.delete</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>导出</td><td><code>cip.cmn.btn.exportBtn</code></td><td><code>buttons.export</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>导出</td><td><code>cip.cmn.btn.exportBtn</code></td><td><code>pm.monthProducePlan.btn.exportPlan</code></td><td>pm_zh.js</td></tr>
+              <tr><td>导入</td><td><code>cip.cmn.btn.importBtn</code></td><td><code>buttons.import</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>导入</td><td><code>cip.cmn.btn.importBtn</code></td><td><code>pm.monthProducePlan.btn.importBtn</code></td><td>pm_zh.js</td></tr>
+              <tr><td>启用</td><td><code>cip.cmn.btn.enable</code></td><td><code>buttons.enable</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>启用</td><td><code>cip.cmn.btn.enable</code></td><td><code>datacenter.shunt.table.startUsing</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>禁用</td><td><code>cip.cmn.btn.disable</code></td><td><code>buttons.deactivate</code></td><td>datacenter_zh.js</td></tr>
+              <tr><td>禁用</td><td><code>cip.cmn.btn.disable</code></td><td><code>datacenter.shunt.table.forbidden</code></td><td>datacenter_zh.js</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout-orange">
+          <span class="callout-icon">&#9888;</span>
+          <div>共发现约 <strong>35 处</strong>可替换的重复定义，主要集中在 datacenter_zh.js 和 qm_zh.js。<br>旧 KEY（如 <code>qm.recordV2.tip.del_success</code>）命名不符合当前规范（含下划线），替换时一并修正。</div>
+        </div>
+      </div>
+
+      <div class="section" id="s9">
+        <h2><span class="num">9</span>存量整理策略</h2>
+        <div class="callout callout-blue">
+          <span class="callout-icon">&#9432;</span>
+          <div><strong>原则：不做大规模迁移，随迭代逐步推进，降低风险。</strong></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>阶段</th><th>时间</th><th>内容</th></tr></thead>
+            <tbody>
+              <tr><td><span class="phase-tag phase-now">第一阶段</span></td><td>即刻</td><td>确认 cip.cmn 标准词条已录入后端系统，发布本规范</td></tr>
+              <tr><td><span class="phase-tag phase-soon">第二阶段</span></td><td>即刻起</td><td>所有新词条严格遵守规范，不再产生新重复</td></tr>
+              <tr><td><span class="phase-tag phase-future">第三阶段</span></td><td>随迭代推进</td><td>迭代哪个模块，顺带替换该模块内的重复旧 KEY</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>迁移操作步骤</h3>
+<pre><code># 1. 搜索旧 KEY 的所有引用位置
+grep -r "旧KEY路径" src/views/
+
+# 2. 编辑器全局替换为标准 KEY
+
+# 3. 旧词条在后端系统中标记为"待删除"，保留一个迭代周期
+#    确认无引用后再从系统中删除</code></pre>
+      </div>
+
+      <div class="section" id="s10">
+        <h2><span class="num">10</span>历史文件退出计划</h2>
+        <p><code>src/lang/*.js</code> 为历史遗留文件，当前与后端系统双轨并存，相同 KEY 以后端系统为准。</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>阶段</th><th>操作</th></tr></thead>
+            <tbody>
+              <tr><td><span class="phase-tag phase-now">近期</span></td><td>新词条只在后端系统创建，不再动本地文件</td></tr>
+              <tr><td><span class="phase-tag phase-soon">中期</span></td><td>本地文件只读，停止维护</td></tr>
+              <tr><td><span class="phase-tag phase-future">远期</span></td><td>本地词条全量导入后端系统，删除 src/lang 目录</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section" id="s11">
+        <h2><span class="num">11</span>常见问题</h2>
+        <div class="faq-item">
+          <div class="faq-q"><span class="q-mark">Q:</span>文案相同但语境不同，能共用 KEY 吗？</div>
+          <div class="faq-a">不能。"确认"按钮用 <code>cip.cmn.btn.confirm</code>，"确认收货"是业务动作，单独建 <code>cip.qm.order.btn.confirmReceipt</code>。文案必须<strong>完全一致且含义相同</strong>，才共用公共 KEY。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="q-mark">Q:</span>同模块多页面都用的字段放哪里？</div>
+          <div class="faq-a">放模块内公共层：<code>cip.{模块}.cmn.{分类}.{词}</code>，如 <code>cip.qm.cmn.field.inspectionDate</code>。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="q-mark">Q:</span>带变量的文案怎么处理？</div>
+          <div class="faq-a">纯通用的放 cmn（如"共 {n} 条记录"），含业务名词的放业务模块（如"删除工单成功"）。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="q-mark">Q:</span>俄文谁来填？</div>
+          <div class="faq-a">开发者只填中文和英文，俄文留空，由翻译人员定期批量补充。系统已配置 <code>fallbackLocale: 'zh'</code>，缺失时回退中文显示，不会显示裸 KEY。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="q-mark">Q:</span>新模块用什么缩写？</div>
+          <div class="faq-a">查第 4 节对照表，没有的联系前端负责人确认后补充，不要自己创建。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="q-mark">Q:</span>系统没有查重功能怎么办？</div>
+          <div class="faq-a">使用系统现有的「按中文值搜索」功能确认是否存在。后续计划在新建词条表单中加自动查重提示，改动约 20 行前端代码，可安排近期迭代实现。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q"><span class="q-mark">Q:</span>旧 KEY 什么时候可以从系统中删除？</div>
+          <div class="faq-a">替换代码引用后，旧 KEY 继续保留在后端系统中（仍能返回翻译），观察一个完整迭代周期（约 2 周），确认无任何页面报缺失后再删除。删除前可在系统备注中标记"待删除"便于识别。</div>
+        </div>
+      </div>
+
+      <div class="section" id="s-appendix">
+        <h2><span class="num">*</span>附录：新增词条快速参考</h2>
+
+        <p><strong>新增词条三步走：</strong></p>
+        <ol style="margin-bottom:16px;">
+          <li>查公共表（第 5 节）&rarr; 有就用</li>
+          <li>查后端系统（按中文搜索）&rarr; 有就用</li>
+          <li>没有再新建</li>
+        </ol>
+
+        <p>新建时按归属选择格式：</p>
+        <div style="margin:8px 0 16px 20px; font-size:15px; line-height:2.2;">
+          <span class="badge badge-blue">公共词</span> <code>cip.cmn.{分类}.{词}</code><br>
+          <span class="badge badge-green">模块公共</span> <code>cip.{模块}.cmn.{分类}.{词}</code><br>
+          <span class="badge badge-orange">页面私有</span> <code>cip.{模块}.{页面}.{分类}.{词}</code>
+        </div>
+
+        <p style="margin-bottom:20px;">中英文必填 &middot; camelCase &middot; 4~5 层</p>
+
+        <h3>分类速查</h3>
+        <div class="cat-list">
+          <span><code>btn</code> 按钮</span>
+          <span><code>title</code> 标题</span>
+          <span><code>field</code> 字段标签</span>
+          <span><code>col</code> 表格列头</span>
+          <span><code>msg</code> 操作反馈</span>
+          <span><code>tip</code> 静态说明</span>
+          <span><code>status</code> 状态值</span>
+          <span><code>tab</code> 页签</span>
+          <span><code>placeholder</code> 占位符</span>
+          <span><code>rule</code> 校验提示</span>
+        </div>
+      </div>
+
+      <div class="site-footer">
+        <p>© 2026 sinoma-dcc-web 前端团队 · 开发规范指南</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0})" aria-label="Back to top">&#8593;</button>
+
+<script src="../../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>开发规范指南</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">&#9776;</div>
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1>开发规范指南</h1>
+      <div class="version">v1.0 &middot; 2026-06-16</div>
+      <div class="tagline">统一标准 · 高效协作</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">站点</div>
+      <a href="index.html" class="active"><span class="icon">🏠</span>首页</a>
+      <a href="specs/index.html"><span class="icon">📋</span>规范列表</a>
+      <div class="nav-group">规范模块</div>
+      <a href="specs/i18n/index.html"><span class="icon">🌐</span>多语言规范</a>
+    </nav>
+    <div class="sidebar-footer">
+      sinoma-dcc-web &middot; 前端团队
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="content">
+
+      <div class="page-header">
+        <h2>开发规范指南</h2>
+        <div class="meta">
+          <span><span class="dot"></span>sinoma-dcc-web 及关联前端项目</span>
+          <span><span class="dot"></span>维护团队：前端团队</span>
+          <span><span class="dot"></span>更新日期：2026-06-16</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">📋</span>关于本指南</h2>
+        <p>本指南旨在统一前端团队的开发规范，提升代码质量和协作效率。通过规范化的命名、格式和流程，减少沟通成本，降低维护难度。</p>
+        <p>所有规范均以 Markdown 文件作为内容源，HTML 文件由 AI 根据 Markdown 自动生成，确保内容与展示的一致性。</p>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">📚</span>规范模块</h2>
+        <div class="card-grid">
+          <a href="specs/i18n/index.html" class="card-item">
+            <div class="card-icon">🌐</div>
+            <div class="card-title">多语言（i18n）使用规范</div>
+            <div class="card-desc">统一多语言词条的命名规范、分类约定和使用流程，防止重复词条，提升国际化开发效率。</div>
+            <div class="card-meta">
+              <span>📅 2026-06-16</span>
+              <span>🏷️ 国际化</span>
+            </div>
+          </a>
+          <a href="specs/index.html" class="card-item">
+            <div class="card-icon">➕</div>
+            <div class="card-title">更多规范</div>
+            <div class="card-desc">后续将陆续添加代码风格、组件设计、API 规范等更多开发指南模块。</div>
+            <div class="card-meta">
+              <span>📅 即将推出</span>
+              <span>🏷️ 规划中</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">🔄</span>更新流程</h2>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-num"><div class="circle">1</div><div class="line"></div></div>
+            <div class="flow-content">
+              <div class="title">编辑 Markdown 文件</div>
+              <p>在对应规范模块目录下编辑 <code>index.md</code> 文件</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num"><div class="circle">2</div><div class="line"></div></div>
+            <div class="flow-content">
+              <div class="title">通知 AI 更新</div>
+              <p>告知 AI 根据最新的 Markdown 内容更新对应的 HTML 文件</p>
+            </div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-num"><div class="circle">3</div></div>
+            <div class="flow-content">
+              <div class="title">预览验证</div>
+              <p>在本地预览更新后的页面，确认内容正确无误</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2><span class="num">💡</span>快速链接</h2>
+        <div class="cat-list">
+          <a href="specs/i18n/index.html#s5" style="text-decoration:none;"><span><code>📋</code> 公共词条标准库</span></a>
+          <a href="specs/i18n/index.html#s3" style="text-decoration:none;"><span><code>🏷️</code> KEY 命名规范</span></a>
+          <a href="specs/i18n/index.html#s6" style="text-decoration:none;"><span><code>🛠️</code> 日常开发 SOP</span></a>
+          <a href="specs/i18n/index.html#s8" style="text-decoration:none;"><span><code>🔍</code> 存量重复词条</span></a>
+        </div>
+      </div>
+
+      <div class="site-footer">
+        <p>© 2026 sinoma-dcc-web 前端团队 · 开发规范指南</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0})" aria-label="Back to top">&#8593;</button>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
