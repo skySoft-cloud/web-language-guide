@@ -143,6 +143,7 @@ tip  →  页面内始终显示的静态说明文字
 | `cip.cps`       | 配置参数系统            | sinoma-dcc-web |
 | `cip.md`        | 水分系数              | sinoma-dcc-web |
 | `cip.equipment` | 设备管理              | sinoma-dcc-web |
+| `cip.phm`       | 预测性维护             | sinoma-dcc-web |
 
 ***
 
