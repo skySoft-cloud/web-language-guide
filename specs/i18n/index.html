@@ -220,67 +220,72 @@ cip.qm.inspection_field_conclusion  （下划线，不统一）</code></pre>
           <div><strong>新建词条前必须先查这张表，有就直接用，不要重复创建。</strong></div>
         </div>
 
+        <div class="search-box">
+          <input type="text" id="termSearch" placeholder="输入中文关键词搜索公共词条..." oninput="searchTerms()">
+          <div class="search-stats" id="searchStats">共 <span id="totalCount">0</span> 条词条</div>
+        </div>
+
         <h3 id="s5-1">5.1 按钮（cip.cmn.btn）</h3>
         <div class="table-wrap">
           <table>
             <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
             <tbody>
-              <tr><td><code>cip.cmn.btn.addBtn</code></td><td>新增</td><td>Add</td></tr>
-              <tr><td><code>cip.cmn.btn.addChildBtn</code></td><td>新增子项</td><td>Add Child</td></tr>
-              <tr><td><code>cip.cmn.btn.saveLineBtn</code></td><td>新增一行</td><td>Add Row</td></tr>
-              <tr><td><code>cip.cmn.btn.editBtn</code></td><td>编辑</td><td>Edit</td></tr>
-              <tr><td><code>cip.cmn.btn.revBtn</code></td><td>修改</td><td>Modify</td></tr>
-              <tr><td><code>cip.cmn.btn.saveBtn</code></td><td>保存</td><td>Save</td></tr>
-              <tr><td><code>cip.cmn.btn.saveBackBtn</code></td><td>保存并返回</td><td>Save &amp; Back</td></tr>
-              <tr><td><code>cip.cmn.btn.saveAndAddBtn</code></td><td>保存并新增</td><td>Save &amp; Add</td></tr>
-              <tr><td><code>cip.cmn.btn.delBtn</code></td><td>删除</td><td>Delete</td></tr>
-              <tr><td><code>cip.cmn.btn.viewBtn</code></td><td>查看</td><td>View</td></tr>
-              <tr><td><code>cip.cmn.btn.viewDataBtn</code></td><td>查看详情</td><td>View Detail</td></tr>
-              <tr><td><code>cip.cmn.btn.detailBtn</code></td><td>明细</td><td>Detail</td></tr>
-              <tr><td><code>cip.cmn.btn.celBtn</code></td><td>取消</td><td>Cancel</td></tr>
-              <tr><td><code>cip.cmn.btn.defBtn</code></td><td>确定</td><td>OK</td></tr>
-              <tr><td><code>cip.cmn.btn.confirm</code></td><td>确认</td><td>Confirm</td></tr>
-              <tr><td><code>cip.cmn.btn.clearBtn</code></td><td>清空</td><td>Clear</td></tr>
-              <tr><td><code>cip.cmn.btn.submitBtn</code></td><td>提交</td><td>Submit</td></tr>
-              <tr><td><code>cip.cmn.btn.unSubmitBtn</code></td><td>撤回</td><td>Withdraw</td></tr>
-              <tr><td><code>cip.cmn.btn.backBtn</code></td><td>取回</td><td>Retrieve</td></tr>
-              <tr><td><code>cip.cmn.btn.goBackBtn</code></td><td>返回</td><td>Back</td></tr>
-              <tr><td><code>cip.cmn.btn.returnLoginBtn</code></td><td>返回登录页</td><td>Back to Login</td></tr>
-              <tr><td><code>cip.cmn.btn.exportBtn</code></td><td>导出</td><td>Export</td></tr>
-              <tr><td><code>cip.cmn.btn.exportTemplateBtn</code></td><td>导出模版</td><td>Export Template</td></tr>
-              <tr><td><code>cip.cmn.btn.importBtn</code></td><td>导入</td><td>Import</td></tr>
-              <tr><td><code>cip.cmn.btn.uploadBtn</code></td><td>上传</td><td>Upload</td></tr>
-              <tr><td><code>cip.cmn.btn.downloadBtn</code></td><td>下载</td><td>Download</td></tr>
-              <tr><td><code>cip.cmn.btn.print</code></td><td>打印</td><td>Print</td></tr>
-              <tr><td><code>cip.cmn.btn.copyBtn</code></td><td>复制</td><td>Copy</td></tr>
-              <tr><td><code>cip.cmn.btn.enable</code></td><td>启用</td><td>Enable</td></tr>
-              <tr><td><code>cip.cmn.btn.disable</code></td><td>禁用</td><td>Disable</td></tr>
-              <tr><td><code>cip.cmn.btn.disableBtn</code></td><td>停用</td><td>Deactivate</td></tr>
-              <tr><td><code>cip.cmn.btn.invalidBtn</code></td><td>失效</td><td>Invalid</td></tr>
-              <tr><td><code>cip.cmn.btn.publishBtn</code></td><td>发布</td><td>Publish</td></tr>
-              <tr><td><code>cip.cmn.btn.initiateBtn</code></td><td>发起</td><td>Initiate</td></tr>
-              <tr><td><code>cip.cmn.btn.audit</code></td><td>审核</td><td>Audit</td></tr>
-              <tr><td><code>cip.cmn.btn.approve</code></td><td>审批</td><td>Approve</td></tr>
-              <tr><td><code>cip.cmn.btn.send</code></td><td>发送</td><td>Send</td></tr>
-              <tr><td><code>cip.cmn.btn.generateBtn</code></td><td>生成</td><td>Generate</td></tr>
-              <tr><td><code>cip.cmn.btn.calBtn</code></td><td>计算</td><td>Calculate</td></tr>
-              <tr><td><code>cip.cmn.btn.startBtn</code></td><td>启动</td><td>Start</td></tr>
-              <tr><td><code>cip.cmn.btn.stopBtn</code></td><td>停止</td><td>Stop</td></tr>
-              <tr><td><code>cip.cmn.btn.refreshBtn</code></td><td>刷新</td><td>Refresh</td></tr>
-              <tr><td><code>cip.cmn.btn.configBtn</code></td><td>配置</td><td>Config</td></tr>
-              <tr><td><code>cip.cmn.btn.modelEdit</code></td><td>模板编辑</td><td>Template Edit</td></tr>
-              <tr><td><code>cip.cmn.btn.dispatchBtn</code></td><td>调度</td><td>Dispatch</td></tr>
-              <tr><td><code>cip.cmn.btn.dealBtn</code></td><td>处理</td><td>Handle</td></tr>
-              <tr><td><code>cip.cmn.btn.fillingBtn</code></td><td>填报</td><td>Fill</td></tr>
-              <tr><td><code>cip.cmn.btn.choice</code></td><td>选择</td><td>Select</td></tr>
-              <tr><td><code>cip.cmn.btn.chooseItemBtn</code></td><td>选择物料</td><td>Select Material</td></tr>
-              <tr><td><code>cip.cmn.btn.handle</code></td><td>操作</td><td>Action</td></tr>
-              <tr><td><code>cip.cmn.btn.historyBtn</code></td><td>历史记录</td><td>History</td></tr>
-              <tr><td><code>cip.cmn.btn.viewProcessBtn</code></td><td>流程查看</td><td>View Process</td></tr>
-              <tr><td><code>cip.cmn.btn.processBtn</code></td><td>流程进度</td><td>Process Progress</td></tr>
-              <tr><td><code>cip.cmn.btn.execute</code></td><td>执行</td><td>Execute</td></tr>
-              <tr><td><code>cip.cmn.btn.resetCacheBtn</code></td><td>重置缓存</td><td>Reset Cache</td></tr>
-              <tr><td><code>cip.cmn.btn.logout</code></td><td>注销</td><td>Logout</td></tr>
+              <tr data-zh="新增" data-en="Add"><td><code>cip.cmn.btn.addBtn</code></td><td>新增</td><td>Add</td></tr>
+              <tr data-zh="新增子项" data-en="Add Child"><td><code>cip.cmn.btn.addChildBtn</code></td><td>新增子项</td><td>Add Child</td></tr>
+              <tr data-zh="新增一行" data-en="Add Row"><td><code>cip.cmn.btn.saveLineBtn</code></td><td>新增一行</td><td>Add Row</td></tr>
+              <tr data-zh="编辑" data-en="Edit"><td><code>cip.cmn.btn.editBtn</code></td><td>编辑</td><td>Edit</td></tr>
+              <tr data-zh="修改" data-en="Modify"><td><code>cip.cmn.btn.revBtn</code></td><td>修改</td><td>Modify</td></tr>
+              <tr data-zh="保存" data-en="Save"><td><code>cip.cmn.btn.saveBtn</code></td><td>保存</td><td>Save</td></tr>
+              <tr data-zh="保存并返回" data-en="Save &amp; Back"><td><code>cip.cmn.btn.saveBackBtn</code></td><td>保存并返回</td><td>Save &amp; Back</td></tr>
+              <tr data-zh="保存并新增" data-en="Save &amp; Add"><td><code>cip.cmn.btn.saveAndAddBtn</code></td><td>保存并新增</td><td>Save &amp; Add</td></tr>
+              <tr data-zh="删除" data-en="Delete"><td><code>cip.cmn.btn.delBtn</code></td><td>删除</td><td>Delete</td></tr>
+              <tr data-zh="查看" data-en="View"><td><code>cip.cmn.btn.viewBtn</code></td><td>查看</td><td>View</td></tr>
+              <tr data-zh="查看详情" data-en="View Detail"><td><code>cip.cmn.btn.viewDataBtn</code></td><td>查看详情</td><td>View Detail</td></tr>
+              <tr data-zh="明细" data-en="Detail"><td><code>cip.cmn.btn.detailBtn</code></td><td>明细</td><td>Detail</td></tr>
+              <tr data-zh="取消" data-en="Cancel"><td><code>cip.cmn.btn.celBtn</code></td><td>取消</td><td>Cancel</td></tr>
+              <tr data-zh="确定" data-en="OK"><td><code>cip.cmn.btn.defBtn</code></td><td>确定</td><td>OK</td></tr>
+              <tr data-zh="确认" data-en="Confirm"><td><code>cip.cmn.btn.confirm</code></td><td>确认</td><td>Confirm</td></tr>
+              <tr data-zh="清空" data-en="Clear"><td><code>cip.cmn.btn.clearBtn</code></td><td>清空</td><td>Clear</td></tr>
+              <tr data-zh="提交" data-en="Submit"><td><code>cip.cmn.btn.submitBtn</code></td><td>提交</td><td>Submit</td></tr>
+              <tr data-zh="撤回" data-en="Withdraw"><td><code>cip.cmn.btn.unSubmitBtn</code></td><td>撤回</td><td>Withdraw</td></tr>
+              <tr data-zh="取回" data-en="Retrieve"><td><code>cip.cmn.btn.backBtn</code></td><td>取回</td><td>Retrieve</td></tr>
+              <tr data-zh="返回" data-en="Back"><td><code>cip.cmn.btn.goBackBtn</code></td><td>返回</td><td>Back</td></tr>
+              <tr data-zh="返回登录页" data-en="Back to Login"><td><code>cip.cmn.btn.returnLoginBtn</code></td><td>返回登录页</td><td>Back to Login</td></tr>
+              <tr data-zh="导出" data-en="Export"><td><code>cip.cmn.btn.exportBtn</code></td><td>导出</td><td>Export</td></tr>
+              <tr data-zh="导出模版" data-en="Export Template"><td><code>cip.cmn.btn.exportTemplateBtn</code></td><td>导出模版</td><td>Export Template</td></tr>
+              <tr data-zh="导入" data-en="Import"><td><code>cip.cmn.btn.importBtn</code></td><td>导入</td><td>Import</td></tr>
+              <tr data-zh="上传" data-en="Upload"><td><code>cip.cmn.btn.uploadBtn</code></td><td>上传</td><td>Upload</td></tr>
+              <tr data-zh="下载" data-en="Download"><td><code>cip.cmn.btn.downloadBtn</code></td><td>下载</td><td>Download</td></tr>
+              <tr data-zh="打印" data-en="Print"><td><code>cip.cmn.btn.print</code></td><td>打印</td><td>Print</td></tr>
+              <tr data-zh="复制" data-en="Copy"><td><code>cip.cmn.btn.copyBtn</code></td><td>复制</td><td>Copy</td></tr>
+              <tr data-zh="启用" data-en="Enable"><td><code>cip.cmn.btn.enable</code></td><td>启用</td><td>Enable</td></tr>
+              <tr data-zh="禁用" data-en="Disable"><td><code>cip.cmn.btn.disable</code></td><td>禁用</td><td>Disable</td></tr>
+              <tr data-zh="停用" data-en="Deactivate"><td><code>cip.cmn.btn.disableBtn</code></td><td>停用</td><td>Deactivate</td></tr>
+              <tr data-zh="失效" data-en="Invalid"><td><code>cip.cmn.btn.invalidBtn</code></td><td>失效</td><td>Invalid</td></tr>
+              <tr data-zh="发布" data-en="Publish"><td><code>cip.cmn.btn.publishBtn</code></td><td>发布</td><td>Publish</td></tr>
+              <tr data-zh="发起" data-en="Initiate"><td><code>cip.cmn.btn.initiateBtn</code></td><td>发起</td><td>Initiate</td></tr>
+              <tr data-zh="审核" data-en="Audit"><td><code>cip.cmn.btn.audit</code></td><td>审核</td><td>Audit</td></tr>
+              <tr data-zh="审批" data-en="Approve"><td><code>cip.cmn.btn.approve</code></td><td>审批</td><td>Approve</td></tr>
+              <tr data-zh="发送" data-en="Send"><td><code>cip.cmn.btn.send</code></td><td>发送</td><td>Send</td></tr>
+              <tr data-zh="生成" data-en="Generate"><td><code>cip.cmn.btn.generateBtn</code></td><td>生成</td><td>Generate</td></tr>
+              <tr data-zh="计算" data-en="Calculate"><td><code>cip.cmn.btn.calBtn</code></td><td>计算</td><td>Calculate</td></tr>
+              <tr data-zh="启动" data-en="Start"><td><code>cip.cmn.btn.startBtn</code></td><td>启动</td><td>Start</td></tr>
+              <tr data-zh="停止" data-en="Stop"><td><code>cip.cmn.btn.stopBtn</code></td><td>停止</td><td>Stop</td></tr>
+              <tr data-zh="刷新" data-en="Refresh"><td><code>cip.cmn.btn.refreshBtn</code></td><td>刷新</td><td>Refresh</td></tr>
+              <tr data-zh="配置" data-en="Config"><td><code>cip.cmn.btn.configBtn</code></td><td>配置</td><td>Config</td></tr>
+              <tr data-zh="模板编辑" data-en="Template Edit"><td><code>cip.cmn.btn.modelEdit</code></td><td>模板编辑</td><td>Template Edit</td></tr>
+              <tr data-zh="调度" data-en="Dispatch"><td><code>cip.cmn.btn.dispatchBtn</code></td><td>调度</td><td>Dispatch</td></tr>
+              <tr data-zh="处理" data-en="Handle"><td><code>cip.cmn.btn.dealBtn</code></td><td>处理</td><td>Handle</td></tr>
+              <tr data-zh="填报" data-en="Fill"><td><code>cip.cmn.btn.fillingBtn</code></td><td>填报</td><td>Fill</td></tr>
+              <tr data-zh="选择" data-en="Select"><td><code>cip.cmn.btn.choice</code></td><td>选择</td><td>Select</td></tr>
+              <tr data-zh="选择物料" data-en="Select Material"><td><code>cip.cmn.btn.chooseItemBtn</code></td><td>选择物料</td><td>Select Material</td></tr>
+              <tr data-zh="操作" data-en="Action"><td><code>cip.cmn.btn.handle</code></td><td>操作</td><td>Action</td></tr>
+              <tr data-zh="历史记录" data-en="History"><td><code>cip.cmn.btn.historyBtn</code></td><td>历史记录</td><td>History</td></tr>
+              <tr data-zh="流程查看" data-en="View Process"><td><code>cip.cmn.btn.viewProcessBtn</code></td><td>流程查看</td><td>View Process</td></tr>
+              <tr data-zh="流程进度" data-en="Process Progress"><td><code>cip.cmn.btn.processBtn</code></td><td>流程进度</td><td>Process Progress</td></tr>
+              <tr data-zh="执行" data-en="Execute"><td><code>cip.cmn.btn.execute</code></td><td>执行</td><td>Execute</td></tr>
+              <tr data-zh="重置缓存" data-en="Reset Cache"><td><code>cip.cmn.btn.resetCacheBtn</code></td><td>重置缓存</td><td>Reset Cache</td></tr>
+              <tr data-zh="注销" data-en="Logout"><td><code>cip.cmn.btn.logout</code></td><td>注销</td><td>Logout</td></tr>
             </tbody>
           </table>
         </div>
@@ -294,18 +299,18 @@ cip.qm.inspection_field_conclusion  （下划线，不统一）</code></pre>
           <table>
             <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
             <tbody>
-              <tr><td><code>cip.cmn.msg.addSuccess</code></td><td>新增成功</td><td>Added successfully</td></tr>
-              <tr><td><code>cip.cmn.msg.updataSuccess</code></td><td>修改成功</td><td>Updated successfully</td></tr>
-              <tr><td><code>cip.cmn.msg.delSuccess</code></td><td>删除成功</td><td>Deleted successfully</td></tr>
-              <tr><td><code>cip.cmn.msg.operateSuccess</code></td><td>操作成功</td><td>Operation successful</td></tr>
-              <tr><td><code>cip.cmn.msg.saveSuccess</code></td><td>保存成功</td><td>Saved successfully</td></tr>
-              <tr><td><code>cip.cmn.msg.submitSuccess</code></td><td>提交成功</td><td>Submitted successfully</td></tr>
-              <tr><td><code>cip.cmn.msg.importSuccess</code></td><td>导入成功</td><td>Imported successfully</td></tr>
-              <tr><td><code>cip.cmn.msg.exportSuccess</code></td><td>导出成功</td><td>Exported successfully</td></tr>
-              <tr><td><code>cip.cmn.msg.enableSuccess</code></td><td>启用成功</td><td>Enabled successfully</td></tr>
-              <tr><td><code>cip.cmn.msg.disableSuccess</code></td><td>禁用成功</td><td>Disabled successfully</td></tr>
-              <tr><td><code>cip.cmn.msg.backSuccess</code></td><td>取回成功</td><td>Retrieved successfully</td></tr>
-              <tr><td><code>cip.cmn.msg.auditSuccess</code></td><td>审核成功</td><td>Audited successfully</td></tr>
+              <tr data-zh="新增成功" data-en="Added successfully"><td><code>cip.cmn.msg.addSuccess</code></td><td>新增成功</td><td>Added successfully</td></tr>
+              <tr data-zh="修改成功" data-en="Updated successfully"><td><code>cip.cmn.msg.updataSuccess</code></td><td>修改成功</td><td>Updated successfully</td></tr>
+              <tr data-zh="删除成功" data-en="Deleted successfully"><td><code>cip.cmn.msg.delSuccess</code></td><td>删除成功</td><td>Deleted successfully</td></tr>
+              <tr data-zh="操作成功" data-en="Operation successful"><td><code>cip.cmn.msg.operateSuccess</code></td><td>操作成功</td><td>Operation successful</td></tr>
+              <tr data-zh="保存成功" data-en="Saved successfully"><td><code>cip.cmn.msg.saveSuccess</code></td><td>保存成功</td><td>Saved successfully</td></tr>
+              <tr data-zh="提交成功" data-en="Submitted successfully"><td><code>cip.cmn.msg.submitSuccess</code></td><td>提交成功</td><td>Submitted successfully</td></tr>
+              <tr data-zh="导入成功" data-en="Imported successfully"><td><code>cip.cmn.msg.importSuccess</code></td><td>导入成功</td><td>Imported successfully</td></tr>
+              <tr data-zh="导出成功" data-en="Exported successfully"><td><code>cip.cmn.msg.exportSuccess</code></td><td>导出成功</td><td>Exported successfully</td></tr>
+              <tr data-zh="启用成功" data-en="Enabled successfully"><td><code>cip.cmn.msg.enableSuccess</code></td><td>启用成功</td><td>Enabled successfully</td></tr>
+              <tr data-zh="禁用成功" data-en="Disabled successfully"><td><code>cip.cmn.msg.disableSuccess</code></td><td>禁用成功</td><td>Disabled successfully</td></tr>
+              <tr data-zh="取回成功" data-en="Retrieved successfully"><td><code>cip.cmn.msg.backSuccess</code></td><td>取回成功</td><td>Retrieved successfully</td></tr>
+              <tr data-zh="审核成功" data-en="Audited successfully"><td><code>cip.cmn.msg.auditSuccess</code></td><td>审核成功</td><td>Audited successfully</td></tr>
             </tbody>
           </table>
         </div>
@@ -315,16 +320,16 @@ cip.qm.inspection_field_conclusion  （下划线，不统一）</code></pre>
           <table>
             <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
             <tbody>
-              <tr><td><code>cip.cmn.msg.addError</code></td><td>新增失败</td><td>Add failed</td></tr>
-              <tr><td><code>cip.cmn.msg.updataError</code></td><td>修改失败</td><td>Update failed</td></tr>
-              <tr><td><code>cip.cmn.msg.delError</code></td><td>删除失败</td><td>Delete failed</td></tr>
-              <tr><td><code>cip.cmn.msg.operateError</code></td><td>操作失败</td><td>Operation failed</td></tr>
-              <tr><td><code>cip.cmn.msg.saveError</code></td><td>保存失败</td><td>Save failed</td></tr>
-              <tr><td><code>cip.cmn.msg.submitError</code></td><td>提交失败</td><td>Submit failed</td></tr>
-              <tr><td><code>cip.cmn.msg.importError</code></td><td>导入失败</td><td>Import failed</td></tr>
-              <tr><td><code>cip.cmn.msg.exportError</code></td><td>导出失败</td><td>Export failed</td></tr>
-              <tr><td><code>cip.cmn.msg.serviceError</code></td><td>调用服务异常</td><td>Service call failed</td></tr>
-              <tr><td><code>cip.cmn.msg.generateError</code></td><td>数据生成失败</td><td>Generate failed</td></tr>
+              <tr data-zh="新增失败" data-en="Add failed"><td><code>cip.cmn.msg.addError</code></td><td>新增失败</td><td>Add failed</td></tr>
+              <tr data-zh="修改失败" data-en="Update failed"><td><code>cip.cmn.msg.updataError</code></td><td>修改失败</td><td>Update failed</td></tr>
+              <tr data-zh="删除失败" data-en="Delete failed"><td><code>cip.cmn.msg.delError</code></td><td>删除失败</td><td>Delete failed</td></tr>
+              <tr data-zh="操作失败" data-en="Operation failed"><td><code>cip.cmn.msg.operateError</code></td><td>操作失败</td><td>Operation failed</td></tr>
+              <tr data-zh="保存失败" data-en="Save failed"><td><code>cip.cmn.msg.saveError</code></td><td>保存失败</td><td>Save failed</td></tr>
+              <tr data-zh="提交失败" data-en="Submit failed"><td><code>cip.cmn.msg.submitError</code></td><td>提交失败</td><td>Submit failed</td></tr>
+              <tr data-zh="导入失败" data-en="Import failed"><td><code>cip.cmn.msg.importError</code></td><td>导入失败</td><td>Import failed</td></tr>
+              <tr data-zh="导出失败" data-en="Export failed"><td><code>cip.cmn.msg.exportError</code></td><td>导出失败</td><td>Export failed</td></tr>
+              <tr data-zh="调用服务异常" data-en="Service call failed"><td><code>cip.cmn.msg.serviceError</code></td><td>调用服务异常</td><td>Service call failed</td></tr>
+              <tr data-zh="数据生成失败" data-en="Generate failed"><td><code>cip.cmn.msg.generateError</code></td><td>数据生成失败</td><td>Generate failed</td></tr>
             </tbody>
           </table>
         </div>
@@ -334,28 +339,28 @@ cip.qm.inspection_field_conclusion  （下划线，不统一）</code></pre>
           <table>
             <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
             <tbody>
-              <tr><td><code>cip.cmn.msg.delWarning</code></td><td>确定删除数据？</td><td>Confirm delete?</td></tr>
-              <tr><td><code>cip.cmn.msg.updataWarning</code></td><td>确定修改数据？</td><td>Confirm update?</td></tr>
-              <tr><td><code>cip.cmn.msg.selectWarning</code></td><td>请选择数据</td><td>Please select data</td></tr>
-              <tr><td><code>cip.cmn.msg.selectOneWarning</code></td><td>只能选择一条数据</td><td>Select only one record</td></tr>
-              <tr><td><code>cip.cmn.msg.leastOneWarning</code></td><td>请至少选择一条数据</td><td>Select at least one record</td></tr>
-              <tr><td><code>cip.cmn.msg.addWarning</code></td><td>请先保存数据</td><td>Please save first</td></tr>
-              <tr><td><code>cip.cmn.msg.editWarning</code></td><td>请选择要编辑的数据</td><td>Please select a record to edit</td></tr>
-              <tr><td><code>cip.cmn.msg.deleteWarning</code></td><td>请选择要删除的数据</td><td>Please select a record to delete</td></tr>
-              <tr><td><code>cip.cmn.msg.submitData</code></td><td>提交后数据将无法更改，是否继续？</td><td>Data cannot be modified after submission. Continue?</td></tr>
-              <tr><td><code>cip.cmn.msg.unSubmitData</code></td><td>确认撤回选择的记录？</td><td>Confirm withdrawal?</td></tr>
-              <tr><td><code>cip.cmn.msg.validWarning</code></td><td>是否启用该条数据？</td><td>Enable this record?</td></tr>
-              <tr><td><code>cip.cmn.msg.invalidWarning</code></td><td>是否禁用该条数据？</td><td>Disable this record?</td></tr>
-              <tr><td><code>cip.cmn.msg.generateWarning</code></td><td>是否生成数据？</td><td>Generate data?</td></tr>
-              <tr><td><code>cip.cmn.msg.noDataYet</code></td><td>暂无数据</td><td>No data available</td></tr>
-              <tr><td><code>cip.cmn.msg.modifiedWarning</code></td><td>数据未作修改</td><td>No changes made</td></tr>
-              <tr><td><code>cip.cmn.msg.conflict</code></td><td>编码已存在</td><td>Code already exists</td></tr>
-              <tr><td><code>cip.cmn.msg.retWarning</code></td><td>是否返回列表页面？</td><td>Back to list?</td></tr>
-              <tr><td><code>cip.cmn.msg.determineDelWarning</code></td><td>确定将选择数据删除？</td><td>Confirm delete selected?</td></tr>
-              <tr><td><code>cip.cmn.msg.startusingWarning</code></td><td>确定将选择数据启用？</td><td>Confirm enable selected?</td></tr>
-              <tr><td><code>cip.cmn.msg.loseefficacyWarning</code></td><td>确定将选择数据失效？</td><td>Confirm invalidate selected?</td></tr>
-              <tr><td><code>cip.cmn.msg.determineUnsubmitWarning</code></td><td>确定将选择数据撤回？</td><td>Confirm withdraw selected?</td></tr>
-              <tr><td><code>cip.cmn.msg.hasChildren</code></td><td>有子项未删除</td><td>Child items exist</td></tr>
+              <tr data-zh="确定删除数据？" data-en="Confirm delete?"><td><code>cip.cmn.msg.delWarning</code></td><td>确定删除数据？</td><td>Confirm delete?</td></tr>
+              <tr data-zh="确定修改数据？" data-en="Confirm update?"><td><code>cip.cmn.msg.updataWarning</code></td><td>确定修改数据？</td><td>Confirm update?</td></tr>
+              <tr data-zh="请选择数据" data-en="Please select data"><td><code>cip.cmn.msg.selectWarning</code></td><td>请选择数据</td><td>Please select data</td></tr>
+              <tr data-zh="只能选择一条数据" data-en="Select only one record"><td><code>cip.cmn.msg.selectOneWarning</code></td><td>只能选择一条数据</td><td>Select only one record</td></tr>
+              <tr data-zh="请至少选择一条数据" data-en="Select at least one record"><td><code>cip.cmn.msg.leastOneWarning</code></td><td>请至少选择一条数据</td><td>Select at least one record</td></tr>
+              <tr data-zh="请先保存数据" data-en="Please save first"><td><code>cip.cmn.msg.addWarning</code></td><td>请先保存数据</td><td>Please save first</td></tr>
+              <tr data-zh="请选择要编辑的数据" data-en="Please select a record to edit"><td><code>cip.cmn.msg.editWarning</code></td><td>请选择要编辑的数据</td><td>Please select a record to edit</td></tr>
+              <tr data-zh="请选择要删除的数据" data-en="Please select a record to delete"><td><code>cip.cmn.msg.deleteWarning</code></td><td>请选择要删除的数据</td><td>Please select a record to delete</td></tr>
+              <tr data-zh="提交后数据将无法更改，是否继续？" data-en="Data cannot be modified after submission. Continue?"><td><code>cip.cmn.msg.submitData</code></td><td>提交后数据将无法更改，是否继续？</td><td>Data cannot be modified after submission. Continue?</td></tr>
+              <tr data-zh="确认撤回选择的记录？" data-en="Confirm withdrawal?"><td><code>cip.cmn.msg.unSubmitData</code></td><td>确认撤回选择的记录？</td><td>Confirm withdrawal?</td></tr>
+              <tr data-zh="是否启用该条数据？" data-en="Enable this record?"><td><code>cip.cmn.msg.validWarning</code></td><td>是否启用该条数据？</td><td>Enable this record?</td></tr>
+              <tr data-zh="是否禁用该条数据？" data-en="Disable this record?"><td><code>cip.cmn.msg.invalidWarning</code></td><td>是否禁用该条数据？</td><td>Disable this record?</td></tr>
+              <tr data-zh="是否生成数据？" data-en="Generate data?"><td><code>cip.cmn.msg.generateWarning</code></td><td>是否生成数据？</td><td>Generate data?</td></tr>
+              <tr data-zh="暂无数据" data-en="No data available"><td><code>cip.cmn.msg.noDataYet</code></td><td>暂无数据</td><td>No data available</td></tr>
+              <tr data-zh="数据未作修改" data-en="No changes made"><td><code>cip.cmn.msg.modifiedWarning</code></td><td>数据未作修改</td><td>No changes made</td></tr>
+              <tr data-zh="编码已存在" data-en="Code already exists"><td><code>cip.cmn.msg.conflict</code></td><td>编码已存在</td><td>Code already exists</td></tr>
+              <tr data-zh="是否返回列表页面？" data-en="Back to list?"><td><code>cip.cmn.msg.retWarning</code></td><td>是否返回列表页面？</td><td>Back to list?</td></tr>
+              <tr data-zh="确定将选择数据删除？" data-en="Confirm delete selected?"><td><code>cip.cmn.msg.determineDelWarning</code></td><td>确定将选择数据删除？</td><td>Confirm delete selected?</td></tr>
+              <tr data-zh="确定将选择数据启用？" data-en="Confirm enable selected?"><td><code>cip.cmn.msg.startusingWarning</code></td><td>确定将选择数据启用？</td><td>Confirm enable selected?</td></tr>
+              <tr data-zh="确定将选择数据失效？" data-en="Confirm invalidate selected?"><td><code>cip.cmn.msg.loseefficacyWarning</code></td><td>确定将选择数据失效？</td><td>Confirm invalidate selected?</td></tr>
+              <tr data-zh="确定将选择数据撤回？" data-en="Confirm withdraw selected?"><td><code>cip.cmn.msg.determineUnsubmitWarning</code></td><td>确定将选择数据撤回？</td><td>Confirm withdraw selected?</td></tr>
+              <tr data-zh="有子项未删除" data-en="Child items exist"><td><code>cip.cmn.msg.hasChildren</code></td><td>有子项未删除</td><td>Child items exist</td></tr>
             </tbody>
           </table>
         </div>
@@ -365,16 +370,16 @@ cip.qm.inspection_field_conclusion  （下划线，不统一）</code></pre>
           <table>
             <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
             <tbody>
-              <tr><td><code>cip.cmn.rule.inputWarning</code></td><td>请输入</td><td>Please enter</td></tr>
-              <tr><td><code>cip.cmn.rule.selectWarning</code></td><td>请选择</td><td>Please select</td></tr>
-              <tr><td><code>cip.cmn.rule.noEmptyWarning</code></td><td>不能为空</td><td>Cannot be empty</td></tr>
-              <tr><td><code>cip.cmn.rule.deleteWarning</code></td><td>请删除前后空格</td><td>Please remove leading/trailing spaces</td></tr>
-              <tr><td><code>cip.cmn.rule.nameLength2Warning</code></td><td>长度不能大于20</td><td>Max length is 20</td></tr>
-              <tr><td><code>cip.cmn.rule.nameLength3Warning</code></td><td>长度不能大于30</td><td>Max length is 30</td></tr>
-              <tr><td><code>cip.cmn.rule.nameLength4Warning</code></td><td>长度不能大于40</td><td>Max length is 40</td></tr>
-              <tr><td><code>cip.cmn.rule.nameLength6Warning</code></td><td>长度不能大于60</td><td>Max length is 60</td></tr>
-              <tr><td><code>cip.cmn.rule.number</code></td><td>请输入数字</td><td>Please enter a number</td></tr>
-              <tr><td><code>cip.cmn.rule.autoValue</code></td><td>自动生成</td><td>Auto generated</td></tr>
+              <tr data-zh="请输入" data-en="Please enter"><td><code>cip.cmn.rule.inputWarning</code></td><td>请输入</td><td>Please enter</td></tr>
+              <tr data-zh="请选择" data-en="Please select"><td><code>cip.cmn.rule.selectWarning</code></td><td>请选择</td><td>Please select</td></tr>
+              <tr data-zh="不能为空" data-en="Cannot be empty"><td><code>cip.cmn.rule.noEmptyWarning</code></td><td>不能为空</td><td>Cannot be empty</td></tr>
+              <tr data-zh="请删除前后空格" data-en="Please remove leading/trailing spaces"><td><code>cip.cmn.rule.deleteWarning</code></td><td>请删除前后空格</td><td>Please remove leading/trailing spaces</td></tr>
+              <tr data-zh="长度不能大于20" data-en="Max length is 20"><td><code>cip.cmn.rule.nameLength2Warning</code></td><td>长度不能大于20</td><td>Max length is 20</td></tr>
+              <tr data-zh="长度不能大于30" data-en="Max length is 30"><td><code>cip.cmn.rule.nameLength3Warning</code></td><td>长度不能大于30</td><td>Max length is 30</td></tr>
+              <tr data-zh="长度不能大于40" data-en="Max length is 40"><td><code>cip.cmn.rule.nameLength4Warning</code></td><td>长度不能大于40</td><td>Max length is 40</td></tr>
+              <tr data-zh="长度不能大于60" data-en="Max length is 60"><td><code>cip.cmn.rule.nameLength6Warning</code></td><td>长度不能大于60</td><td>Max length is 60</td></tr>
+              <tr data-zh="请输入数字" data-en="Please enter a number"><td><code>cip.cmn.rule.number</code></td><td>请输入数字</td><td>Please enter a number</td></tr>
+              <tr data-zh="自动生成" data-en="Auto generated"><td><code>cip.cmn.rule.autoValue</code></td><td>自动生成</td><td>Auto generated</td></tr>
             </tbody>
           </table>
         </div>
@@ -384,16 +389,16 @@ cip.qm.inspection_field_conclusion  （下划线，不统一）</code></pre>
           <table>
             <thead><tr><th>KEY</th><th>中文</th><th>英文</th></tr></thead>
             <tbody>
-              <tr><td><code>cip.cmn.title.add</code></td><td>新增</td><td>Add</td></tr>
-              <tr><td><code>cip.cmn.title.edit</code></td><td>编辑</td><td>Edit</td></tr>
-              <tr><td><code>cip.cmn.title.view</code></td><td>查看</td><td>View</td></tr>
-              <tr><td><code>cip.cmn.title.detail</code></td><td>详情</td><td>Detail</td></tr>
-              <tr><td><code>cip.cmn.title.list</code></td><td>列表</td><td>List</td></tr>
-              <tr><td><code>cip.cmn.title.import</code></td><td>导入</td><td>Import</td></tr>
-              <tr><td><code>cip.cmn.title.export</code></td><td>导出</td><td>Export</td></tr>
-              <tr><td><code>cip.cmn.title.config</code></td><td>配置</td><td>Config</td></tr>
-              <tr><td><code>cip.cmn.title.promptTitle</code></td><td>提示</td><td>Tips</td></tr>
-              <tr><td><code>cip.cmn.title.serialNumber</code></td><td>序号</td><td>No.</td></tr>
+              <tr data-zh="新增" data-en="Add"><td><code>cip.cmn.title.add</code></td><td>新增</td><td>Add</td></tr>
+              <tr data-zh="编辑" data-en="Edit"><td><code>cip.cmn.title.edit</code></td><td>编辑</td><td>Edit</td></tr>
+              <tr data-zh="查看" data-en="View"><td><code>cip.cmn.title.view</code></td><td>查看</td><td>View</td></tr>
+              <tr data-zh="详情" data-en="Detail"><td><code>cip.cmn.title.detail</code></td><td>详情</td><td>Detail</td></tr>
+              <tr data-zh="列表" data-en="List"><td><code>cip.cmn.title.list</code></td><td>列表</td><td>List</td></tr>
+              <tr data-zh="导入" data-en="Import"><td><code>cip.cmn.title.import</code></td><td>导入</td><td>Import</td></tr>
+              <tr data-zh="导出" data-en="Export"><td><code>cip.cmn.title.export</code></td><td>导出</td><td>Export</td></tr>
+              <tr data-zh="配置" data-en="Config"><td><code>cip.cmn.title.config</code></td><td>配置</td><td>Config</td></tr>
+              <tr data-zh="提示" data-en="Tips"><td><code>cip.cmn.title.promptTitle</code></td><td>提示</td><td>Tips</td></tr>
+              <tr data-zh="序号" data-en="No."><td><code>cip.cmn.title.serialNumber</code></td><td>序号</td><td>No.</td></tr>
             </tbody>
           </table>
         </div>
@@ -666,5 +671,49 @@ grep -r "旧KEY路径" src/views/
 <button class="back-top" id="backTop" onclick="window.scrollTo({top:0})" aria-label="Back to top">&#8593;</button>
 
 <script src="../../assets/js/main.js"></script>
+<script>
+  var totalCount = 0;
+
+  function initSearch() {
+    var rows = document.querySelectorAll('#s5 tbody tr[data-zh]');
+    totalCount = rows.length;
+    document.getElementById('totalCount').textContent = totalCount;
+  }
+
+  function searchTerms() {
+    var keyword = document.getElementById('termSearch').value.trim().toLowerCase();
+    var rows = document.querySelectorAll('#s5 tbody tr[data-zh]');
+    var matchCount = 0;
+
+    rows.forEach(function(row) {
+      var zh = row.getAttribute('data-zh') || '';
+      var en = row.getAttribute('data-en') || '';
+      var key = row.querySelector('code') ? row.querySelector('code').textContent : '';
+
+      if (keyword === '') {
+        row.style.display = '';
+        matchCount++;
+      } else {
+        if (zh.toLowerCase().indexOf(keyword) !== -1 ||
+            en.toLowerCase().indexOf(keyword) !== -1 ||
+            key.toLowerCase().indexOf(keyword) !== -1) {
+          row.style.display = '';
+          matchCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    });
+
+    var stats = document.getElementById('searchStats');
+    if (keyword === '') {
+      stats.innerHTML = '共 <span id="totalCount">' + totalCount + '</span> 条词条';
+    } else {
+      stats.innerHTML = '找到 <span style="color:#2563eb;font-weight:bold;">' + matchCount + '</span> 条匹配，共 ' + totalCount + ' 条';
+    }
+  }
+
+  initSearch();
+</script>
 </body>
 </html>

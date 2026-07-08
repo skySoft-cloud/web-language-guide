@@ -670,3 +670,32 @@ td code { font-size: 13px; }
   .page-header h2 { font-size: 26px; }
   .example { flex-direction: column; }
 }
+
+.search-box {
+  position: relative;
+  margin: 20px 0;
+}
+.search-box input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+  transition: all .2s ease;
+  outline: none;
+}
+.search-box input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+}
+.search-box input::placeholder {
+  color: var(--text3);
+}
+
+.search-stats {
+  font-size: 14px;
+  color: var(--text3);
+  margin-top: 8px;
+}
