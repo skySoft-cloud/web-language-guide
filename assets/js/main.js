@@ -24,12 +24,40 @@ function updateBackTop() {
   }
 }
 
+// 滚动揭示动画（rAF 节流）
+let ticking = false;
 window.addEventListener('scroll', () => {
-  updateActiveNav();
-  updateBackTop();
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      updateActiveNav();
+      updateBackTop();
+      ticking = false;
+    });
+    ticking = true;
+  }
 }, { passive: true });
+
+// IntersectionObserver 滚动揭示
+function initReveal() {
+  const reveals = document.querySelectorAll('.reveal');
+  if (!reveals.length) return;
+  if (!('IntersectionObserver' in window)) {
+    reveals.forEach(el => el.classList.add('visible'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => io.observe(el));
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   updateActiveNav();
   updateBackTop();
+  initReveal();
 });

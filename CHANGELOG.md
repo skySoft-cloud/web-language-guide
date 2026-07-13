@@ -1,5 +1,14 @@
 # 更新日志
 
+## v1.2 (2026-07-13)
+- 更新：升级全局样式，采用 Plus Jakarta Sans + JetBrains Mono 字体
+- 更新：首页新增英雄区与统计带，提升视觉层次
+- 更新：阴影系统升级为 4 层（xs/sm/md/lg）+ accent 蓝紫阴影
+- 更新：代码块改为深色终端风格，提升可读性
+- 更新：大屏内容区居中（max-width 1180px），修复 1920px 靠左问题
+- 更新：滚动揭示动画（IntersectionObserver）与 rAF 节流
+- 新增：项目级 RULE 与 skill（guide-book-spec、guide-book-style）
+
 ## v1.1 (2026-07-08)
 - 新增：CHANGELOG.md 变更日志文件
 - 清理：删除根目录下重复的 `多语言规范.md` 和 `多语言规范.html`
