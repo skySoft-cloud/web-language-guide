@@ -779,6 +779,7 @@ td code { font-size: 13px; }
   background: var(--bg-soft);
   cursor: default;
   display: flex;
+  align-items: center;
   gap: 8px;
 }
 .faq-q .q-mark {
